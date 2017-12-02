@@ -8,6 +8,10 @@ router.route('/api').get((req, res) => {
   res.json({ message: 'Welcome to testing-api API!' });
 });
 
+router.route('/api/*').options((req, res) => {
+  res.status(204).end();
+});
+
 router.use('/api/users?', user);
 router.use('/api/qiniu-uptokens?', qiniuToken);
 
