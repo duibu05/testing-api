@@ -1,21 +1,31 @@
 const QINIU_CONF = require('../../config').qiniu,
+      qiniuUpTokenFacade = require('./facade'),
       qiniu = require("qiniu");
 
 
 //需要填写你的 Access Key 和 Secret Key
-qiniu.conf.ACCESS_KEY = QINIU_CONF.access_key;
-qiniu.conf.SECRET_KEY = QINIU_CONF.secret_key;
+let mac = new qiniu.auth.digest.Mac(QINIU_CONF.access_key, QINIU_CONF.secret_key);
 
-//构建上传策略函数
+//构建客户端上传策略函数
 function uptoken(bucket, key) {
-  var putPolicy = new qiniu.rs.PutPolicy(QINIU_CONF.bucken);
-  return putPolicy.token();
+  var putPolicy = new qiniu.rs.PutPolicy({
+    scope: bucket
+  });
+  return putPolicy.uploadToken(mac);
 }
 
 
-exports.uptoken = function(req, res) {
-  token = uptoken(BUCKET);
-
-  res.json({ token: token });
+exports.uptoken = function(req, res, next) {
+  qiniuUpTokenFacade.findOne().then(doc => {
+    if(doc) {
+      res.json(doc);
+    } else {
+      token = uptoken(QINIU_CONF.bucket);
+      qiniuUpTokenFacade.create({ token: token })
+      res.json({ token: token });
+    }
+  }).catch(err => {
+    next(err)
+  })
 };
 
