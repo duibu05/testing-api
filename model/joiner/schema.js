@@ -17,7 +17,7 @@ const joinerSchema = new Schema({
 joinerSchema.pre('save', function(next) {
   if (!this.joinAt) this.joinAt = new Date;
   
-    next();
+  next();
 });
 
 module.exports =  joinerSchema;
