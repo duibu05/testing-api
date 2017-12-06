@@ -1,11 +1,52 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
-
 const userSchema = new Schema({
-  title: { type: String, required: true },
-  body: { type: String }
+  account: { type: String, required: true, unique: true },
+  nickname: { type: String, required: true },
+  phone: { type: String, required: true },
+  password: { type: String, required: true },
+  token: { type: String },
+  role: { type: String, default: 'admin' },
+  routes: { type: Array, default: [] },
+  meta: {
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now(),
+    },
+  }
 });
+
+userSchema.pre('save', function (next) {
+  let user = this;
+
+  if (!this.isNew)
+    user.meta.updatedAt = Date.now();
+
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) return next(err)
+
+    bcrypt.hash(user.password, salt, (err, hash) => {
+      if (err) return next(err);
+      user.password = hash;
+      next();
+    })
+  })
+});
+
+userSchema.methods = {
+  comparePassword(password, cb) {
+    bcrypt.compare(password, this.password, (err, isMatch) => {
+      if (err) return cb(err);
+      cb(null, isMatch);
+    })
+  }
+};
 
 
 module.exports =  userSchema;
