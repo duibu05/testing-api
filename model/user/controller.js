@@ -101,13 +101,16 @@ class UserController extends Controller {
   }
 
   resetPwd(req, res, next) {
-    this.facade.update({ _id: req.params.id }, req.body)
-    .then((results) => {
-      if (results.n < 1) { return res.sendStatus(404); }
-      if (results.nModified < 1) { return res.sendStatus(304); }
-      res.sendStatus(204);
-    })
-    .catch(err => next(err));
+    this.facade.model.hashPassword(req.body.password).then(result => {
+      req.body.password = result;
+      this.facade.update({ _id: req.params.id }, req.body)
+      .then((results) => {
+        if (results.n < 1) { return res.json({code: -1, msg: '无相应记录！'}); }
+        if (results.nModified < 1) { return res.json({code: -1, msg: '修改失败！'}); }
+        res.json({ code: 0, msg: 'ok' });
+      })
+      .catch(err => next(err));
+    });
   }
 }
 

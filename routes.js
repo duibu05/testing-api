@@ -8,6 +8,12 @@ const news = require('./model/news/router');
 const sideBar = require('./model/side-bar/router');
 const aboutUs = require('./model/about-us/router');
 
+router.use((req, res, next) => {
+  setTimeout(() => {
+    next();
+  }, 200);
+});
+
 router.route('/api').get((req, res) => {
   res.json({ message: 'Welcome to testing-api API!' });
 });
