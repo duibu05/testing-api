@@ -14,7 +14,7 @@ roleSchema.pre('save', function(next) {
 
 roleSchema.post('save', function(error, doc, next) {
   if (error.name === 'MongoError' && error.code === 11000) {
-    next(new Error('There was a duplicate key error'));
+    next(new Error('存在同名数据！'));
   } else if(error.name === 'ValidationError') {
     for(let key in error.errors) {
       next(new Error(error.errors[key].message));

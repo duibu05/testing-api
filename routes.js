@@ -7,6 +7,7 @@ const joiner = require('./model/joiner/router');
 const news = require('./model/news/router');
 const sideBar = require('./model/side-bar/router');
 const aboutUs = require('./model/about-us/router');
+const wechatContent = require('./model/wechat-content/router');
 const category = require('./model/category/router');
 
 router.use((req, res, next) => {
@@ -30,9 +31,10 @@ router.use('/api/joiners?', joiner);
 router.use('/api/news', news);
 router.use('/api/side-bar', sideBar);
 router.use('/api/about-us', aboutUs);
+router.use('/api/wechat-contents?', wechatContent);
 
 router.use((err, req, res, next) => {
-  res.status(500).json({
+  res.status(200).json({
     code: -1,
     msg: err.message
   })
