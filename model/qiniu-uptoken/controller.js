@@ -18,11 +18,11 @@ function uptoken(bucket, key) {
 exports.uptoken = function(req, res, next) {
   qiniuUpTokenFacade.findOne().then(doc => {
     if(doc) {
-      res.json(doc);
+      res.json({ code: 0, data: doc });
     } else {
       token = uptoken(QINIU_CONF.bucket);
       qiniuUpTokenFacade.create({ token: token })
-      res.json({ token: token });
+      res.json({code:0, data: { token: token }});
     }
   }).catch(err => {
     next(err)
