@@ -7,6 +7,7 @@ const joiner = require('./model/joiner/router');
 const news = require('./model/news/router');
 const sideBar = require('./model/side-bar/router');
 const aboutUs = require('./model/about-us/router');
+const category = require('./model/category/router');
 
 router.use((req, res, next) => {
   setTimeout(() => {
@@ -23,6 +24,7 @@ router.route('/api/*').options((req, res) => {
 });
 
 router.use('/api/users?', user);
+router.use('/api/category?(ies)?', category);
 router.use('/api/qiniu-uptokens?', qiniuToken);
 router.use('/api/joiners?', joiner);
 router.use('/api/news', news);

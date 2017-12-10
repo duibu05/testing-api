@@ -11,6 +11,11 @@
     "node": ">=6"
   },
   "author": "duibu05 <duibu05@126.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/duibu05/testing-api.git"
+  },
   "dependencies": {
     "bcrypt": "^1.0.3",
     "bluebird": "^3.4.6",
@@ -21,7 +26,6 @@
     "mongoose": "^4.7.0",
     "morgan": "^1.7.0",
     "qiniu": "^7.1.1",
-    "shortid": "^2.2.8",
     "uuid": "^3.1.0"
   },
   "devDependencies": {

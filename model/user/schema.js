@@ -8,8 +8,10 @@ const userSchema = new Schema({
   phone: { type: String, required: true },
   password: { type: String, required: true },
   token: { type: String },
-  role: { type: String, default: 'admin' },
-  routes: { type: Array, default: [] },
+  role: {
+    type: { type: String, default: 'admin' },
+    name: { type: String }
+  },
   meta: {
     createdAt: {
       type: Date,

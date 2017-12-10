@@ -1,6 +1,8 @@
 const Controller = require('../../lib/controller');
 const userFacade = require('./facade');
+const roleFacade = require('../role/facade')
 const uuid = require('uuid/v4')
+const _ = require('lodash')
 
 class UserController extends Controller {
   signin(req, res, next) {
@@ -15,7 +17,7 @@ class UserController extends Controller {
               this.facade.update({ _id: result._id }, { token: result.token })
                 .then(updated => {
                   if(updated.n && updated.nModified) {
-                    res.json({
+                    return res.json({
                       code: 0,
                       msg: 'ok',
                       data: { token: result.token },
@@ -24,14 +26,14 @@ class UserController extends Controller {
                 })
               
             } else {
-              res.json({
+              return res.json({
                 code: -1,
                 msg: '账号或密码错误！'
               });
             }
           });
         } else {
-          res.json({
+          return res.json({
             code: -1,
             msg: '账号或密码错误！'
           });
@@ -42,7 +44,7 @@ class UserController extends Controller {
   signout(req, res, next) {
     this.facade.update({ token: '' })
       .then(() => {
-        res.json({
+        return res.json({
           code: 0,
           msg: 'ok'
         })
@@ -53,14 +55,14 @@ class UserController extends Controller {
     this.facade.findOne({ account: req.body.account })
     .then(user => {
       if(user) {
-        res.json({
+        return res.json({
           code: -1,
           msg: '用户已存在！'
         })
       }
     })
     .catch(err => {
-      res.json({
+      return res.json({
         code: -1,
         msg: '请求异常！'
       })
@@ -71,7 +73,7 @@ class UserController extends Controller {
     this.facade.findOne({ account: req.body.account })
       .then(user => {
         if(user) {
-          res.json({
+          return res.json({
             code: -1,
             msg: '用户已存在！'
           })
@@ -79,25 +81,35 @@ class UserController extends Controller {
 
         this.facade.create(req.body)
           .then(user => {
-            res.json({
+            return res.json({
               code: 0,
               msg: 'ok',
               data: user
             })
           })
           .catch(err => {
-            res.json({
+            return res.json({
               code: -1,
               msg: `请求异常: ${err.message}`
             })
           })
       })
       .catch(err => {
-        res.json({
+        return res.json({
           code: -1,
           msg: `请求异常: ${err.message}`
         })
       })
+  }
+
+  findByToken(req, res, next) {
+    this.facade.findOne({token: req.params.token})
+      .then(doc => {
+        roleFacade.findOne({name: doc.role.name}).then(role => {
+          return res.status(200).json({ code:0, data: {user:doc, role:role} });
+        })
+      })
+      .catch(err => next(err));
   }
 
   resetPwd(req, res, next) {
@@ -107,7 +119,7 @@ class UserController extends Controller {
       .then((results) => {
         if (results.n < 1) { return res.json({code: -1, msg: '无相应记录！'}); }
         if (results.nModified < 1) { return res.json({code: -1, msg: '修改失败！'}); }
-        res.json({ code: 0, msg: 'ok' });
+        return res.json({ code: 0, msg: 'ok' });
       })
       .catch(err => next(err));
     });

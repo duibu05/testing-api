@@ -2,6 +2,10 @@ const controller = require('./controller');
 const Router = require('express').Router;
 const router = new Router();
 
+const role = require('../role/router');
+
+router.use('/roles?', role);
+
 router.route('/')
   .get((...args) => controller.find(...args))
   .post((...args) => controller.create(...args));
@@ -19,7 +23,7 @@ router.route('/reset-password/:id')
   .put((...args) => controller.resetPwd(...args))
 
 router.route('/token/:token')
-  .get((...args) => controller.findOne(...args))
+  .get((...args) => controller.findByToken(...args))
 
 router.route('/:id')
   .put((...args) => controller.update(...args))
