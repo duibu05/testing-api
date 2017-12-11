@@ -10,6 +10,7 @@ const aboutUs = require('./model/about-us/router');
 const wechatContent = require('./model/wechat-content/router');
 const category = require('./model/category/router');
 const question = require('./model/question/router');
+const paper = require('./model/paper/router');
 
 router.use((req, res, next) => {
   setTimeout(() => {
@@ -30,6 +31,7 @@ router.use('/api/category?(ies)?', category);
 router.use('/api/qiniu-uptokens?', qiniuToken);
 router.use('/api/joiners?', joiner);
 router.use('/api/questions?', question);
+router.use('/api/papers?', paper);
 router.use('/api/news', news);
 router.use('/api/side-bar', sideBar);
 router.use('/api/about-us', aboutUs);
