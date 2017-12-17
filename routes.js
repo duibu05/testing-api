@@ -8,6 +8,7 @@ const news = require('./model/news/router');
 const sideBar = require('./model/side-bar/router');
 const aboutUs = require('./model/about-us/router');
 const wechatContent = require('./model/wechat-content/router');
+const wechatUser = require('./model/wechat-user/router');
 const category = require('./model/category/router');
 const question = require('./model/question/router');
 const paper = require('./model/paper/router');
@@ -51,6 +52,7 @@ router.use('/api/news', news);
 router.use('/api/side-bar', sideBar);
 router.use('/api/about-us', aboutUs);
 router.use('/api/wechat-contents?', wechatContent);
+router.use('/api/wechat-users?', wechatUser);
 
 router.use((err, req, res, next) => {
   res.status(200).json({
