@@ -21,6 +21,7 @@ router.route('/signout')
 
 router.route('/reset-password/:id')
   .put((...args) => controller.resetPwd(...args))
+  .post((...args) => controller.checkPwd(...args));
 
 router.route('/token/:token')
   .get((...args) => controller.findByToken(...args))

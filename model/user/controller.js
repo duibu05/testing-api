@@ -126,6 +126,27 @@ class UserController extends Controller {
       .catch(err => next(err));
     });
   }
+
+  checkPwd(req, res, next) {
+    this.facade.findById(req.params.id)
+      .then(result => {
+        if (result) {
+          result.comparePassword(req.body.password, (err, isMatch) => {
+            if (err) next(err);
+            if (isMatch) {
+              return res.json({
+                code: 0
+              });
+            } else {
+              return res.json({
+                code: -1,
+                msg: '旧密码不正确！'
+              });
+            }
+          });
+        }
+      })
+  }
 }
 
 module.exports = new UserController(userFacade);
