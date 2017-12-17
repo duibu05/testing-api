@@ -12,6 +12,7 @@ const userSchema = new Schema({
     type: { type: String, default: 'admin' },
     name: { type: String }
   },
+  status: { type: Number, enum: [0, 1], default: 1 },
   meta: {
     createdAt: {
       type: Date,
