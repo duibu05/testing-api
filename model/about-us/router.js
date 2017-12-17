@@ -3,10 +3,10 @@ const Router = require('express').Router;
 const router = new Router();
 
 router.route('/')
-  .post((...args) => controller.create(...args));
+  .post((...args) => controller.create(...args))
+  .get((...args) => controller.find(...args));
 
 router.route('/:id')
-  .put((...args) => controller.update(...args))
-  .get((...args) => controller.findById(...args));
+  .put((...args) => controller.update(...args));
 
 module.exports = router;
