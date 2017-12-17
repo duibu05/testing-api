@@ -46,7 +46,6 @@ userSchema.post('find', function (results) {
   for (let i = 0, len = results.length; i < len; i++) {
     results[i].password = ''
   }
-  console.log(results)
 });
 
 userSchema.methods = {
