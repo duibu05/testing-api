@@ -13,6 +13,7 @@ const category = require('./model/category/router');
 const question = require('./model/question/router');
 const paper = require('./model/paper/router');
 const lesson = require('./model/lesson/router');
+const webContent = require('./model/web-content/router');
 
 /**
  * clear empty param in req.query
@@ -55,6 +56,7 @@ router.use('/api/side-bar', sideBar);
 router.use('/api/about-us', aboutUs);
 router.use('/api/wechat-contents?', wechatContent);
 router.use('/api/wechat-users?', wechatUser);
+router.use('/api/web-contents?', webContent);
 
 router.use((err, req, res, next) => {
   res.status(200).json({
