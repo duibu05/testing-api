@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const wechatContentSchema = new Schema({
   title: { type: String, required: [true, '标题必填！']},
   cat: { type: String },
+  catName: { type: String },
   keywords: [{
     value: { type: String },
   }],
