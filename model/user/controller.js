@@ -12,7 +12,6 @@ class UserController extends Controller {
           result.comparePassword(req.body.password, (err, isMatch) => {
             if (err) next(err);
             if (isMatch) {
-              delete result.password;
               result.token = uuid();
               this.facade.update({ _id: result._id }, { token: result.token })
                 .then(updated => {
@@ -81,6 +80,7 @@ class UserController extends Controller {
 
         this.facade.create(req.body)
           .then(user => {
+            delete user.password
             return res.json({
               code: 0,
               msg: 'ok',
@@ -105,6 +105,7 @@ class UserController extends Controller {
   findByToken(req, res, next) {
     this.facade.findOne({token: req.params.token})
       .then(doc => {
+        doc.password = ''
         roleFacade.findOne({name: doc.role.name}).then(role => {
           return res.status(200).json({ code:0, data: {user:doc, role:role} });
         })
@@ -115,6 +116,7 @@ class UserController extends Controller {
   resetPwd(req, res, next) {
     this.facade.model.hashPassword(req.body.password).then(result => {
       req.body.password = result;
+      req.body.token = '';
       this.facade.update({ _id: req.params.id }, req.body)
       .then((results) => {
         if (results.n < 1) { return res.json({code: -1, msg: '无相应记录！'}); }

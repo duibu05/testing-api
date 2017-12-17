@@ -12,6 +12,21 @@ const category = require('./model/category/router');
 const question = require('./model/question/router');
 const paper = require('./model/paper/router');
 
+/**
+ * clear empty param in req.query
+ */
+
+router.use((req, res, next) => {
+  const propNames = Object.getOwnPropertyNames(req.query);
+  for (let i = 0, len = propNames.length; i < len; i++) {
+    const propName = propNames[i];
+    if (req.query[propName] === '' || req.query[propName] === null || req.query[propName] === undefined) {
+      delete req.query[propName];
+    }
+  }
+  next();
+})
+
 router.use((req, res, next) => {
   setTimeout(() => {
     next();
