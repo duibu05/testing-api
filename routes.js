@@ -12,6 +12,7 @@ const wechatUser = require('./model/wechat-user/router');
 const category = require('./model/category/router');
 const question = require('./model/question/router');
 const paper = require('./model/paper/router');
+const lesson = require('./model/lesson/router');
 
 /**
  * clear empty param in req.query
@@ -49,6 +50,7 @@ router.use('/api/joiners?', joiner);
 router.use('/api/questions?', question);
 router.use('/api/papers?', paper);
 router.use('/api/news', news);
+router.use('/api/lessons?', lesson);
 router.use('/api/side-bar', sideBar);
 router.use('/api/about-us', aboutUs);
 router.use('/api/wechat-contents?', wechatContent);
