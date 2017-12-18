@@ -14,6 +14,7 @@ const question = require('./model/question/router');
 const paper = require('./model/paper/router');
 const lesson = require('./model/lesson/router');
 const webContent = require('./model/web-content/router');
+const carouselMgmt = require('./model/carousel-mgmt/router')
 
 /**
  * clear empty param in req.query
@@ -57,6 +58,7 @@ router.use('/api/about-us', aboutUs);
 router.use('/api/wechat-contents?', wechatContent);
 router.use('/api/wechat-users?', wechatUser);
 router.use('/api/web-contents?', webContent);
+router.use('/api/carousel-mgmts?', carouselMgmt);
 
 router.use((err, req, res, next) => {
   res.status(200).json({
