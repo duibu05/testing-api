@@ -6,6 +6,9 @@ router.route('/')
   .post((...args) => controller.create(...args))
   .get((...args) => controller.find(...args));
 
+router.route('/findOne')
+  .get((...args) => controller.findOnlyOne(...args))
+
 router.route('/:id')
   .put((...args) => controller.update(...args));
 

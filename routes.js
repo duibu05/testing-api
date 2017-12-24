@@ -15,6 +15,7 @@ const paper = require('./model/paper/router');
 const lesson = require('./model/lesson/router');
 const webContent = require('./model/web-content/router');
 const carouselMgmt = require('./model/carousel-mgmt/router')
+const website = require('./model/website/router')
 
 /**
  * clear empty param in req.query
@@ -31,34 +32,29 @@ router.use((req, res, next) => {
   next();
 })
 
-router.use((req, res, next) => {
-  setTimeout(() => {
-    next();
-  }, 200);
-});
-
-router.route('/api').get((req, res) => {
+router.route('/v1').get((req, res) => {
   res.json({ message: 'Welcome to testing-api API!' });
 });
 
-router.route('/api/*').options((req, res) => {
+router.route('/v1/*').options((req, res) => {
   res.status(204).end();
 });
 
-router.use('/api/users?', user);
-router.use('/api/category?(ies)?', category);
-router.use('/api/qiniu-uptokens?', qiniuToken);
-router.use('/api/joiners?', joiner);
-router.use('/api/questions?', question);
-router.use('/api/papers?', paper);
-router.use('/api/news', news);
-router.use('/api/lessons?', lesson);
-router.use('/api/side-bar', sideBar);
-router.use('/api/about-us', aboutUs);
-router.use('/api/wechat-contents?', wechatContent);
-router.use('/api/wechat-users?', wechatUser);
-router.use('/api/web-contents?', webContent);
-router.use('/api/recommended-mgmts?', carouselMgmt);
+router.use('/v1/users?', user);
+router.use('/v1/category?(ies)?', category);
+router.use('/v1/qiniu-uptokens?', qiniuToken);
+router.use('/v1/joiners?', joiner);
+router.use('/v1/questions?', question);
+router.use('/v1/papers?', paper);
+router.use('/v1/news', news);
+router.use('/v1/lessons?', lesson);
+router.use('/v1/side-bar', sideBar);
+router.use('/v1/about-us', aboutUs);
+router.use('/v1/wechat-contents?', wechatContent);
+router.use('/v1/wechat-users?', wechatUser);
+router.use('/v1/web-contents?', webContent);
+router.use('/v1/recommended-mgmts?', carouselMgmt);
+router.use('/v1/website?', website);
 
 router.use((err, req, res, next) => {
   res.status(200).json({

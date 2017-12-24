@@ -16,11 +16,11 @@ const userSchema = new Schema({
   meta: {
     createdAt: {
       type: Date,
-      default: Date.now(),
+      default: Date.now()
     },
     updatedAt: {
       type: Date,
-      default: Date.now(),
+      default: Date.now()
     },
   }
 });

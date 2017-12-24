@@ -12,7 +12,7 @@ const lessonSchema = new Schema({
   keshi: { type: String, required: true },
   xingshi: { type: String, required: true },
   place: { type: String, required: true },
-  startTime: { type: String, required: true },
+  startTime: { type: Date, required: true },
   cost: { type: String, required: true },
   releatedLesson: [],
   status: { type: Number, default: 1, enum: [0, 1, 2, 3]},
