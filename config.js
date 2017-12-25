@@ -7,9 +7,9 @@ const config = {
     url: process.env.MONGO_DB_URI || 'mongodb://localhost/testing-api'
   },
   qiniu: {
-    access_key: 'LAZ4C4DTVBYf4gQsGcHXvxLS-2_-jFQ-tdfgzbKL',
-    secret_key: 'X1aPSj693RB7HVWO_Tl8vsypk3GWb3SBEwYkcnUq',
-    bucket: 'ccf-china-public',
+    access_key: 'YE6Jmx-R-Cl0UJZKgJ_osSHeXCpOtk4IjFGMySwg',
+    secret_key: 'ApFdSvLu75ICUPYjS8dQkovVSWAuXah6mp_jEQBi',
+    bucket: 'kaoping',
     host:'http://upload-na0.qiniu.com/'
   },
 };
