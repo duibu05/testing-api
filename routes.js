@@ -16,6 +16,7 @@ const lesson = require('./model/lesson/router');
 const webContent = require('./model/web-content/router');
 const carouselMgmt = require('./model/carousel-mgmt/router')
 const website = require('./model/website/router')
+const wechat = require('./model/wechat/router')
 
 /**
  * clear empty param in req.query
@@ -55,6 +56,7 @@ router.use('/v1/wechat-users?', wechatUser);
 router.use('/v1/web-contents?', webContent);
 router.use('/v1/recommended-mgmts?', carouselMgmt);
 router.use('/v1/website?', website);
+router.use('/v1/wechat?', wechat);
 
 router.use((err, req, res, next) => {
   res.status(200).json({
