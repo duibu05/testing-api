@@ -14,6 +14,9 @@ router.route('/index/:openId')
 router.use('/content', wechatContent);
 router.use('/join', join)
 
+router.route('/about-us')
+  .get((...args) => controller.aboutUs(...args));
+
 router.route('/:id')
   .put((...args) => controller.update(...args))
   .get((...args) => controller.findById(...args))

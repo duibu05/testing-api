@@ -6,6 +6,7 @@ const historyFacade = require('../history/facade');
 const wechatUserFacade = require('../wechat-user/facade');
 const carouselMgmtFacade = require('../carousel-mgmt/facade');
 const wechatContentFacade = require('../wechat-content/facade');
+const aboutUsFacade = require('../about-us/facade');
 
 class WechatController extends Controller {
   index(req, res, next) {
@@ -44,6 +45,16 @@ class WechatController extends Controller {
       }).catch(err => {
         next(err);
       })
+  }
+
+  aboutUs(req, res, next) {
+    aboutUsFacade.find({ page: 1, limit: 1 }).then(docs => {
+      res.json({
+        code: 0,
+        msg: 'ok',
+        data: docs[0]
+      })
+    }).catch(err => next(err))
   }
 }
 
