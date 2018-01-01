@@ -1,6 +1,9 @@
 const controller = require('./controller');
 const Router = require('express').Router;
+const join = require('../joiner/router');
 const router = new Router();
+
+router.use('/join', join)
 
 router.route('/index').get((...args) => controller.index(...args));
 

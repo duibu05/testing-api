@@ -1,5 +1,7 @@
 const controller = require('./controller');
 const Router = require('express').Router;
+const wechatContent = require('../wechat-content/router');
+const join = require('../joiner/router');
 const router = new Router();
 
 router.route('/')
@@ -7,7 +9,10 @@ router.route('/')
   .post((...args) => controller.create(...args));
 
 router.route('/index/:openId')
-  .get((...args) => controller.index(...args))
+  .get((...args) => controller.index(...args));
+
+router.use('/content', wechatContent);
+router.use('/join', join)
 
 router.route('/:id')
   .put((...args) => controller.update(...args))

@@ -5,6 +5,7 @@ const categoryFacade = require('../category/facade');
 const historyFacade = require('../history/facade');
 const wechatUserFacade = require('../wechat-user/facade');
 const carouselMgmtFacade = require('../carousel-mgmt/facade');
+const wechatContentFacade = require('../wechat-content/facade');
 
 class WechatController extends Controller {
   index(req, res, next) {
