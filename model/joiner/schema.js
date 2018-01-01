@@ -10,7 +10,8 @@ const joinerSchema = new Schema({
   joinIn: {
     sn: { type: String, required: true },
     category: { type: String, required: true },
-    name: { type: String, required: true }
+    name: { type: String, required: true },
+    post: { type: String, require: true }
   }
 });
 

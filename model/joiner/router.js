@@ -13,7 +13,8 @@ const dealWithParams = function(req, res, next) {
           req.body.joinIn = {
             sn: doc._id,
             category: doc.catName,
-            name: doc.title
+            name: doc.title,
+            post: doc.post
           }
         }
         next();
@@ -27,7 +28,8 @@ const dealWithParams = function(req, res, next) {
           req.body.joinIn = {
             sn: doc._id,
             category: doc.cat,
-            name: doc.title
+            name: doc.title,
+            post: doc.post
           }
         }
         next();
