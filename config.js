@@ -12,6 +12,10 @@ const config = {
     bucket: 'kaoping',
     host:'http://upload-na0.qiniu.com/'
   },
+  dayu: {
+    accessKeyId: process.env.ACCESS_KEY_ID || 'LTAI14yEWN5IPXLy',
+    secretAccessKey: process.env.SECRET_ACCESS_KEY || 'hhhhhhhhh'
+  }
 };
 
 module.exports = config;

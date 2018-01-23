@@ -2,6 +2,7 @@ const controller = require('./controller');
 const Router = require('express').Router;
 const wechatContent = require('../wechat-content/router');
 const join = require('../joiner/router');
+const sms = require('../sms/router');
 const router = new Router();
 
 router.route('/')
@@ -12,7 +13,8 @@ router.route('/index/:openId')
   .get((...args) => controller.index(...args));
 
 router.use('/content', wechatContent);
-router.use('/join', join)
+router.use('/join', join);
+router.use('/sms', sms);
 
 router.route('/about-us')
   .get((...args) => controller.aboutUs(...args));

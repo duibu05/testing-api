@@ -20,13 +20,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
 
-app.use(function(req,res,next){
+app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', req.header('Origin'));
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type,x-token');
-  res.header('Access-Control-Allow-Credentials','true');
+  res.header('Access-Control-Allow-Credentials', 'true');
   next();
-})
+});
+
 app.use('/', routes);
 
 app.listen(config.server.port, () => {

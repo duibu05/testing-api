@@ -17,10 +17,12 @@
     "url": "https://github.com/duibu05/testing-api.git"
   },
   "dependencies": {
+    "@alicloud/sms-sdk": "^1.0.3",
     "bcrypt": "^1.0.3",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "express-rate-limit": "^2.11.0",
     "helmet": "^3.1.0",
     "lodash": "^4.17.4",
     "mongoose": "^4.7.0",
