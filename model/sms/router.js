@@ -10,7 +10,15 @@ const sendSMSLimiter = new RateLimit({
   message: '请求过于频繁，请稍后重试！'
 });
 
+const validParams = (req, res, next) => {
+  if (req.body.phone) {
+    next();
+  } else {
+    next(new Error('手机号不能为空'));
+  }
+};
+
 router.route('/')
-  .post(sendSMSLimiter, (...args) => controller.sendSMS(...args));
+  .post(validParams, sendSMSLimiter, (...args) => controller.sendSMS(...args));
 
 module.exports = router;

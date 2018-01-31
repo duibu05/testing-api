@@ -7,14 +7,18 @@ const config = {
     url: process.env.MONGO_DB_URI || 'mongodb://localhost/testing-api'
   },
   qiniu: {
-    access_key: 'YE6Jmx-R-Cl0UJZKgJ_osSHeXCpOtk4IjFGMySwg',
-    secret_key: 'ApFdSvLu75ICUPYjS8dQkovVSWAuXah6mp_jEQBi',
+    access_key: process.env.QINIU_KEY || 'key',
+    secret_key: process.env.QINIU_SECRET || 'secret',
     bucket: 'kaoping',
     host:'http://upload-na0.qiniu.com/'
   },
   dayu: {
-    accessKeyId: process.env.ACCESS_KEY_ID || 'LTAI14yEWN5IPXLy',
-    secretAccessKey: process.env.SECRET_ACCESS_KEY || 'hhhhhhhhh'
+    accessKeyId: process.env.ACCESS_KEY_ID || 'appid',
+    secretAccessKey: process.env.SECRET_ACCESS_KEY || 'secret'
+  },
+  mapp: {
+    secret: process.env.MAPP_SECRET || '',
+    mappid: process.env.MAPP_ID || ''
   }
 };
 
