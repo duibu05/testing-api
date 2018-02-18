@@ -17,7 +17,7 @@ const questionSchema = new Schema({
     options: { type: String, required: true },
     content: { type: String, required: true },
   }],
-  rightAnswer: { type: String, required: true },
+  rightAnswer: { type: Array, required: true },
   analysis: { type: String, required: true },
   createdAt: { type: Date, default: new Date }
 });
