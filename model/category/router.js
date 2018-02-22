@@ -9,6 +9,12 @@ router.route('/')
 router.route('/rebuild')
   .get((...args) => controller.findByTypeAndRebuildDate(...args));
 
+router.route('/subject')
+  .post((...args) => controller.findSubject(...args));
+
+router.route('/category')
+  .post((...args) => controller.findCategory(...args));
+
 router.route('/:id')
   .put((...args) => controller.update(...args))
   .get((...args) => controller.findById(...args))

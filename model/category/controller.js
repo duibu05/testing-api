@@ -1,7 +1,32 @@
 const Controller = require('../../lib/controller');
 const categoryFacade = require('./facade');
+const paperFacade = require('../paper/facade');
 
 class CategoryController extends Controller {
+  findSubject(req, res, next){
+    categoryFacade.find({ type: 'shijuan', level: 'second' }).then(subjects => {
+      res.json({
+        code: 0,
+        msg: 'ok!',
+        data: subjects
+      })
+    })
+  }
+
+  findCategory(req, res, next) {
+    categoryFacade.find({ type: 'shijuan', level: 'third' }).then(cats => {
+      for(let cat in cats) {
+        cat.score = '13/355'
+      }
+
+      res.json({
+        code: 0,
+        msg: 'ok!',
+        data: cats
+      })
+    })
+  }
+
   findByTypeAndRebuildDate(req, res, next) {
     req.query.level = 'first';
     this.facade.find(req.query)
