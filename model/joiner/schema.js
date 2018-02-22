@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const joinerSchema = new Schema({
   name: { type: String, required: true },
   cellphone: { type: String, required: true },
+  openId: { type: String, required: false },
   from: { type: String, required: true },
   joinAt: { type: Date },
   joinIn: {

@@ -1,6 +1,7 @@
 const controller = require('./controller');
 const Router = require('express').Router;
 const wechatContent = require('../wechat-content/router');
+const wechatUser = require('../wechat-user/router');
 const join = require('../joiner/router');
 const sms = require('../sms/router');
 const router = new Router();
@@ -15,6 +16,8 @@ router.route('/index')
 router.use('/content', wechatContent);
 router.use('/join', join);
 router.use('/sms', sms);
+
+router.use('/user', wechatUser);
 
 router.route('/about-us')
   .post((...args) => controller.aboutUs(...args));

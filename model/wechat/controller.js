@@ -78,11 +78,22 @@ class WechatController extends Controller {
         });
       }
 
-      res.json({
-        code: 0,
-        msg: 'ok',
-        data: body
-      });
+      wechatUserFacade.find({ openId: body.openid }).then(user => {
+        const result = _.assign({}, body)
+        result.openId = body.openid
+        
+        result.hasBind = false
+        
+        if(user && user.length) {
+          result.hasBind = true
+        }
+
+        res.json({
+          code: 0,
+          msg: 'ok',
+          data: result
+        });
+      })
     });
   }
 }

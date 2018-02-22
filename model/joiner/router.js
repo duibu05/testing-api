@@ -7,6 +7,7 @@ const router = new Router();
 const dealWithParams = function(req, res, next) {
   if (req.body.from === 'mapp') {
     req.body.from = '微信';
+    req.name = req.body.nickname
     if (req.body.joinIn) {
       wechatContent.findById(req.body.joinIn).then(doc => {
         if(doc) {
