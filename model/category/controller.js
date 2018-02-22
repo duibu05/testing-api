@@ -18,8 +18,7 @@ class CategoryController extends Controller {
     categoryFacade.find({ type: 'shijuan', level: 'third' }).then(cats => {
       const results = [];
       for(let i = 0, len = cats.length; i < len; i++) {
-        const result = {}
-        result = _.assign(result, cats[i])
+        const result = _.assign({}, cats[i])
         results.push(result)
       }
 
