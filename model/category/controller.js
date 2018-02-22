@@ -3,6 +3,22 @@ const categoryFacade = require('./facade');
 const paperFacade = require('../paper/facade');
 
 class CategoryController extends Controller {
+  findPaper(req, res, next) {
+    paperFacade.find({ 'firstCat.id': req.body.targetId, 'secondCat.id': req.body.subject, 'thirdCat.id': req.body.category }).then(paper => {
+      const results = [];
+      if (paper) {
+        
+        for (let i = 0, len = paper.length; i < len; i++) {
+          
+          const result = {
+            title: paper[i].title,
+            progress: '14/100'
+          }
+        }
+      }
+    });
+  }
+  
   findSubject(req, res, next){
     categoryFacade.find({ type: 'shijuan', level: 'second' }).then(subjects => {
       res.json({
@@ -20,7 +36,7 @@ class CategoryController extends Controller {
         const result = {
           name: cats[i].name,
           image: cats[i].image,
-          score: '15/255'
+          progress: '15/255'
         }
         results.push(result)
       }
