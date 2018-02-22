@@ -1,13 +1,13 @@
 const controller = require('./controller');
 const Router = require('express').Router;
 const wechatContent = require('../wechat-content/facade');
+const wechatUser = require('../wechat-user/facade');
 const lesson = require('../lesson/facade');
 const router = new Router();
 
 const dealWithParams = function(req, res, next) {
   if (req.body.from === 'mapp') {
     req.body.from = '微信';
-    req.name = req.body.nickname
     if (req.body.joinIn) {
       wechatContent.findById(req.body.joinIn).then(doc => {
         if(doc) {
@@ -17,6 +17,13 @@ const dealWithParams = function(req, res, next) {
             name: doc.title,
             post: doc.post
           }
+
+          wechatUser.findOne({ openId: req.body.openId }).then(user => {
+            if(user) {
+              req.body.name = user.nickname
+              req.body.cellphone = user.cellphone
+            }
+          });
         }
         next();
       }).catch(err => next(err));
