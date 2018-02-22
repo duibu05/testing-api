@@ -16,9 +16,11 @@ class CategoryController extends Controller {
 
   findCategory(req, res, next) {
     categoryFacade.find({ type: 'shijuan', level: 'third' }).then(cats => {
-      const results = _.assign({}, cats)
-      for(let i = 0, len = results.length; i < len; i++) {
-        results[i].score = '13/355'
+      const results = [];
+      for(let i = 0, len = cats.length; i < len; i++) {
+        const result = {}
+        result = _.assign(result, cats[i])
+        results.push(result)
       }
 
       res.json({
