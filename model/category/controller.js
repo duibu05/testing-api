@@ -15,8 +15,8 @@ class CategoryController extends Controller {
 
   findCategory(req, res, next) {
     categoryFacade.find({ type: 'shijuan', level: 'third' }).then(cats => {
-      for(let cat in cats) {
-        cat.score = '13/355'
+      for(let i = 0, len = cats.length; i < len; i++) {
+        cats[i].score = '13/355'
       }
 
       res.json({
