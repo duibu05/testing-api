@@ -43,6 +43,9 @@ router.route('/')
   .get((...args) => controller.find(...args))
   .post((...args) => dealWithParams(...args), (...args) => controller.create(...args));
 
+router.route('/myLesson')
+  .post((...args) => controller.find(...args));
+
 router.route('/:id')
   .put((...args) => controller.update(...args))
   .get((...args) => controller.findById(...args))
