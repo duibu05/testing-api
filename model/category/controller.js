@@ -1,6 +1,7 @@
 const Controller = require('../../lib/controller');
 const categoryFacade = require('./facade');
 const paperFacade = require('../paper/facade');
+const _ = require('lodash')
 
 class CategoryController extends Controller {
   findSubject(req, res, next){
@@ -15,14 +16,15 @@ class CategoryController extends Controller {
 
   findCategory(req, res, next) {
     categoryFacade.find({ type: 'shijuan', level: 'third' }).then(cats => {
-      for(let i = 0, len = cats.length; i < len; i++) {
-        cats[i].score = '13/355'
+      const results = _.assign({}, cats)
+      for(let i = 0, len = results.length; i < len; i++) {
+        results[i].score = '13/355'
       }
 
       res.json({
         code: 0,
         msg: 'ok!',
-        data: cats
+        data: results
       })
     })
   }
