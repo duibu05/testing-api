@@ -6,7 +6,9 @@ const _ = require('lodash');
 class WechatContentController extends Controller {
     find(req, res, next) {
         const data = {};
+        const original = req.body.original
         _.assign(data, req.body, req.params, req.query)
+        delete data.original
         this.facade.count(data)
           .then(rows => {
             if (rows > 0) {
