@@ -38,7 +38,8 @@ class PaperController extends Controller {
             data: {
                 correctRate: correctPercentage,
                 totalChallenge: total,
-                score: userScore
+                score: userScore,
+                historyId: paperHistory._id
             }
         })
       });
