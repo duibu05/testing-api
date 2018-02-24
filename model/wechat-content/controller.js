@@ -1,19 +1,19 @@
 const Controller = require('../../lib/controller');
 const wechatContentFacade = require('./facade');
 const moment = require('moment');
-const _ = require('lodash');
 
 class WechatContentController extends Controller {
     find(req, res, next) {
-        const data = {};
-        const original = req.body.original
-        _.assign(data, req.body, req.params, req.query)
-        delete data.original
+        const data = {
+          page: req.body.page,
+          limit: req.body.limit || 20,
+          cat: req.body.cat
+        };
         this.facade.count(data)
           .then(rows => {
             if (rows > 0) {
-              const pageCount = Math.ceil(rows / +req.query.limit)
-              this.facade.find(req.query)
+              const pageCount = Math.ceil(rows / +data.limit)
+              this.facade.find(data)
                 .then(collection => {
                   if (req.body.original && req.body.original === 'mapp') {
                     for(let i = 0, len = collection.length; i < len; i++) {
