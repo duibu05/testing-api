@@ -36,10 +36,14 @@ class PaperController extends Controller {
             code: 0,
             msg: 'ok',
             data: {
+              statistics:{
                 correctRate: correctPercentage,
-                questionSize: total,
+                questionSize: total
+              },
+              paperHistory: {
                 score: userScore,
-                historyId: paperHistory._id
+                _id: paperHistory._id
+              }
             }
         })
       });
