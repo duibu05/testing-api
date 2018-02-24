@@ -7,7 +7,8 @@ const sideBarSchema = new Schema({
   qq: { type: String, required: true },
   wechatQRCodeURL: { type: String, required: true },
   addressMapURL: { type: String, required: true },
-  createdAt: { type: Date, default: new Date }
+  createdAt: { type: Date, default: new Date },
+  timestamp: { type: Number, default: Date.now() }
 });
 
 sideBarSchema.pre('save', function(next) {

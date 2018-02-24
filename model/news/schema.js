@@ -10,7 +10,8 @@ const newsSchema = new Schema({
   }],
   content: { type: String },
   attachments: { type: Object },
-  createdAt: { type: Date, default: new Date }
+  createdAt: { type: Date, default: new Date },
+  timestamp: { type: Number, default: Date.now() }
 });
 
 newsSchema.pre('save', function(next) {

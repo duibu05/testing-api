@@ -18,7 +18,8 @@ const paperSchema = new Schema({
   },
   image: { type: String, required: true },
   questions: { type: Array },
-  createdAt: { type: Date, default: new Date }
+  createdAt: { type: Date, default: new Date },
+  timestamp: { type: Number, default: Date.now() }
 });
 
 paperSchema.pre('save', function(next) {

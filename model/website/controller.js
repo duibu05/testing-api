@@ -12,7 +12,7 @@ const webContentFacade = require('../web-content/facade');
 
 class WebsiteIndexController extends Controller {
   index(req, res, next) {
-    Promise.all([carouselMgmtFacade.find({ page: 'webIndex' }), newsFacade.find({ page: 1, limit: 6, sort: '-createdAt' }), sidebarFacade.find({ page: 1, limit: 1 })])
+    Promise.all([carouselMgmtFacade.find({ page: 'webIndex' }), newsFacade.find({ page: 1, limit: 6, sort: '-timestamp' }), sidebarFacade.find({ page: 1, limit: 1 })])
       .then(([p1, p2, p3]) => {
         const data = {
           recommended: _.groupBy(p1, 'cat'),

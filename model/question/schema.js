@@ -19,7 +19,8 @@ const questionSchema = new Schema({
   }],
   rightAnswer: { type: Array, required: true },
   analysis: { type: String, required: true },
-  createdAt: { type: Date, default: new Date }
+  createdAt: { type: Date, default: new Date },
+  timestamp: { type: Number, default: Date.now() }
 });
 
 questionSchema.pre('save', function(next) {

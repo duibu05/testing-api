@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const roleSchema = new Schema({
   name: { type: String, required: [true, '角色名称必填！'], unique: true },
   body: { type: Object, required: true },
-  createdAt: { type: Date, default: new Date }
+  createdAt: { type: Date, default: new Date },
+  timestamp: { type: Number, default: Date.now() }
 });
 
 roleSchema.pre('save', function(next) {

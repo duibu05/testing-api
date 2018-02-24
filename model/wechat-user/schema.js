@@ -12,7 +12,8 @@ const wechatUserSchema = new Schema({
     questionSize: { type: Number, required: false, default: 0 },
     correctRate: { type: String, required: false, default: '100%' }
   },
-  createdAt: { type: Date, default: new Date }
+  createdAt: { type: Date, default: new Date },
+  timestamp: { type: Number, default: Date.now() }
 });
 
 wechatUserSchema.pre('save', function(next) {

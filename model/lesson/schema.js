@@ -16,7 +16,8 @@ const lessonSchema = new Schema({
   cost: { type: String, required: true },
   releatedLesson: [],
   status: { type: Number, default: 1, enum: [0, 1, 2, 3]},
-  createdAt: { type: Date, default: new Date }
+  createdAt: { type: Date, default: new Date },
+  timestamp: { type: Number, default: Date.now() }
 });
 
 lessonSchema.pre('save', function(next) {

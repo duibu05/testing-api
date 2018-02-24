@@ -18,6 +18,7 @@ const userSchema = new Schema({
       type: Date,
       default: Date.now()
     },
+    timestamp: { type: Number, default: Date.now() },
     updatedAt: {
       type: Date,
       default: Date.now()

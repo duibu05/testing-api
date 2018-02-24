@@ -8,7 +8,8 @@ const qiniuUpTokenSchema = new Schema({
     createdAt: {
       type: Date, 
       expires: 50*60
-    }
+    },
+    timestamp: { type: Number, default: Date.now() }
   }
 });
 
