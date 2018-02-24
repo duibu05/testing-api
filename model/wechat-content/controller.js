@@ -4,18 +4,24 @@ const moment = require('moment');
 
 class WechatContentController extends Controller {
     find(req, res, next) {
-        const data = {
+        const countCondition = {
           page: req.body.page,
           limit: req.body.limit || 20,
         };
 
-        req.body.cat && (data.cat = req.body.cat)
+        req.body.cat && (countCondition.cat = req.body.cat)
 
-        this.facade.count(data)
-          .then(rows => {
+        this.facade.count(countCondition).then(rows => {
             if (rows > 0) {
-              const pageCount = Math.ceil(rows / +data.limit)
-              this.facade.find(data)
+              const queryCondition = {
+                page: req.body.page,
+                limit: req.body.limit || 20,
+              };
+      
+              req.body.cat && (queryCondition.cat = req.body.cat)
+
+              const pageCount = Math.ceil(rows / +queryCondition.limit)
+              this.facade.find(queryCondition)
                 .then(collection => {
                   if (req.body.original && req.body.original === 'mapp') {
                     for(let i = 0, len = collection.length; i < len; i++) {
