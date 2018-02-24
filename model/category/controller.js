@@ -4,6 +4,16 @@ const paperFacade = require('../paper/facade');
 const questionFacade = require('../question/facade');
 
 class CategoryController extends Controller {
+  findQuestionDetails(req, res, next) {
+    questionFacade.findOne({ _id: req.body.questionId }).then(question => {
+      res.json({
+        code: 0,
+        msg: 'ok!',
+        data: question
+      })
+    });
+  }
+
   findPaperDetails(req, res, next) {
     paperFacade.findOne({_id: req.body.paperId}).then(paper => {
       if (!paper.questions.length) {

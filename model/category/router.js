@@ -21,6 +21,9 @@ router.route('/paper')
 router.route('/paper-details')
   .post((...args) => controller.findPaperDetails(...args));
 
+router.route('/question-details')
+  .post((...args) => controller.findQuestionDetails(...args));
+
 router.route('/:id')
   .put((...args) => controller.update(...args))
   .get((...args) => controller.findById(...args))
