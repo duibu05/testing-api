@@ -23,7 +23,7 @@ const paperSchema = new Schema({
     firstCat: { type: String },
     secondCat: { type: String },
     points: { type: Number }
-  }],
+  }, { _id: false }],
   createdAt: { type: Date, default: new Date }
 });
 
