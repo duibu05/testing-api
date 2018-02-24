@@ -7,8 +7,10 @@ class WechatContentController extends Controller {
         const data = {
           page: req.body.page,
           limit: req.body.limit || 20,
-          cat: req.body.cat
         };
+
+        req.body.cat && (data.cat = req.body.cat)
+
         this.facade.count(data)
           .then(rows => {
             if (rows > 0) {
