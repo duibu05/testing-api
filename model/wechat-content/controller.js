@@ -1,6 +1,7 @@
 const Controller = require('../../lib/controller');
 const wechatContentFacade = require('./facade');
 const moment = require('moment');
+const _ = require('lodash');
 
 class WechatContentController extends Controller {
     find(req, res, next) {
