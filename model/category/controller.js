@@ -10,11 +10,17 @@ class CategoryController extends Controller {
         
         for (let i = 0, len = paper.length; i < len; i++) {
           
-          const result = {
+          results.push({
             title: paper[i].title,
             progress: '14/100'
-          }
+          })
         }
+
+        res.json({
+          code: 0,
+          msg: 'ok',
+          data: results
+        })
       }
     });
   }
@@ -33,12 +39,11 @@ class CategoryController extends Controller {
     categoryFacade.find({ type: 'shijuan', level: 'third' }).then(cats => {
       const results = [];
       for(let i = 0, len = cats.length; i < len; i++) {
-        const result = {
+        results.push({
           name: cats[i].name,
           image: cats[i].image,
           progress: '15/255'
-        }
-        results.push(result)
+        })
       }
 
       res.json({

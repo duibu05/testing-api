@@ -15,6 +15,9 @@ router.route('/subject')
 router.route('/category')
   .post((...args) => controller.findCategory(...args));
 
+router.route('/paper')
+  .post((...args) => controller.findPaper(...args));
+
 router.route('/:id')
   .put((...args) => controller.update(...args))
   .get((...args) => controller.findById(...args))

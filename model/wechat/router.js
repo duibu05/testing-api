@@ -19,7 +19,7 @@ router.use('/join', join);
 router.use('/sms', sms);
 
 router.use('/user', wechatUser);
-router.use('/tiku', category);
+router.use('/question-bank', category);
 
 router.route('/about-us')
   .post((...args) => controller.aboutUs(...args));
