@@ -37,7 +37,7 @@ class PaperController extends Controller {
             msg: 'ok',
             data: {
                 correctRate: correctPercentage,
-                totalChallenge: total,
+                questionSize: total,
                 score: userScore,
                 historyId: paperHistory._id
             }
