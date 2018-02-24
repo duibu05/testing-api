@@ -2,10 +2,63 @@ const Controller = require('../../lib/controller');
 const categoryFacade = require('./facade');
 const paperFacade = require('../paper/facade');
 const questionFacade = require('../question/facade');
+const paperHistoryFacade = require('../paper-history/facade');
+const _ = require('lodash');
 
 class CategoryController extends Controller {
   findQuestionDetails(req, res, next) {
-    questionFacade.findOne({ _id: req.body.questionId }).then(question => {
+    Promise.all([
+      questionFacade.findById(req.body.questionId), 
+      paperFacade.findById(req.body.paperId),
+      paperHistoryFacade.findOne({ openId: req.body.openId, paperId: req.body.paperId, status: 1 })
+    ]).then(([question, paper, paperHistory]) => {
+      const point = (() => {
+        let point = 0
+        for (let j = 0, len = paper.questions.length; j < len; j++) {
+          if (paper.questions[j].id === req.body.questionId) {
+            point = paper.questions[j].point 
+            break;
+          }
+        }
+
+        return point
+      })()
+      const userSelectedAnswer = req.body.userAnswer.split(',')
+
+      if (paperHistory) {
+        for (let i = 0, len = paperHistory.questionsHistory.length; i < len; i++) {
+          if (paperHistory.questionsHistory[i].id === req.body.questionId) {
+            paperHistory.questionsHistory[i].userAnswer = userSelectedAnswer
+            paperHistory.questionsHistory[i].point = point
+            paperHistory.questionSize = paper.questions.length
+
+            break;
+          }
+        }
+        paperHistoryFacade.update({ _id: paperHistory._id }, {
+          questionsHistory: paperHistory.questionsHistory,
+          questionSize: paperHistory.questionSize
+        })
+      } else {
+        const questionHistory = {
+          userAnswer: userSelectedAnswer,
+          point: point,
+        }
+
+        _.assign(questionHistory, JSON.parse(JSON.stringify(question)))
+
+        paperHistoryFacade.create({
+          paperId: req.body.paperId,
+          title: paper.title,
+          image: paper.image,
+          score: 0,
+          progress: 1,
+          questionSize: paper.questions.length,
+          questionsHistory: [questionHistory],
+          status: 1,
+          openId: req.body.openId,
+        })
+      }
       res.json({
         code: 0,
         msg: 'ok!',

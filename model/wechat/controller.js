@@ -12,7 +12,7 @@ const request = require('request');
 
 class WechatController extends Controller {
   index(req, res, next) {
-    const pArr = [carouselMgmtFacade.find({ page: 'wechatIndex' }), wechatUserFacade.findOne({ phone: req.body.openId })]
+    const pArr = [carouselMgmtFacade.find({ page: 'wechatIndex' }), wechatUserFacade.findOne({ openId: req.body.openId })]
     Promise.all(pArr)
       .then(([p1, p2]) => {
         const data = {
@@ -20,16 +20,9 @@ class WechatController extends Controller {
         }
         if (p2) {
           data.userinfo = p2;
-          Promise.all([historyFacade.count({ openId: req.body.openId }), historyFacade.count({ openId: req.body.openId, status: 1 })])
-            .then(([p3, p4]) => {
-              data.history = {
-                total : p3
-              };
-              if (p3) {
-                data.history.correctRate = Math.round(p4 / p3 * 100) + '%';
-              } else {
-                data.history.correctRate = '-';
-              }
+          historyFacade.findOne({ openId: req.body.openId }).then(history => {
+              data.history = history;
+              
               res.status(200).json({
                 code: 0,
                 msg: 'ok',
