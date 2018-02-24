@@ -17,13 +17,7 @@ const paperSchema = new Schema({
     name: { type: String, required: true }
   },
   image: { type: String, required: true },
-  questions: [{
-    id: { type: String },
-    title: { type: String },
-    firstCat: { type: String },
-    secondCat: { type: String },
-    points: { type: Number }
-  }, { _id: false }],
+  questions: { type: Array },
   createdAt: { type: Date, default: new Date }
 });
 
