@@ -11,6 +11,7 @@ class CategoryController extends Controller {
         for (let i = 0, len = paper.length; i < len; i++) {
           
           results.push({
+            _id: paper[i]._id,
             title: paper[i].title,
             progress: '14/100'
           })
@@ -40,6 +41,7 @@ class CategoryController extends Controller {
       const results = [];
       for(let i = 0, len = cats.length; i < len; i++) {
         results.push({
+          _id: cats[i]._id,
           name: cats[i].name,
           image: cats[i].image,
           progress: '15/255'
