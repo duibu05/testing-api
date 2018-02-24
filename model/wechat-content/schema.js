@@ -11,7 +11,7 @@ const wechatContentSchema = new Schema({
   }],
   post: { type: String },
   content: { type: String, required: [true, '内容必填！']},
-  createdAt: { type: Date, default: new Date }
+  createdAt: { type: String, default: new Date }
 });
 
 wechatContentSchema.pre('save', function(next) {
