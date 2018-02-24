@@ -3,6 +3,16 @@ const categoryFacade = require('./facade');
 const paperFacade = require('../paper/facade');
 
 class CategoryController extends Controller {
+  findPaperDetails(req, res, next) {
+    paperFacade.findOne({_id: req.body.paperId}).then(paper => {
+      res.json({
+        code: 0,
+        msg: 'ok!',
+        data: paper
+      })
+    })
+  }
+
   findPaper(req, res, next) {
     paperFacade.find({ 'firstCat.id': req.body.targetId, 'secondCat.id': req.body.subjectId, 'thirdCat.id': req.body.categoryId }).then(paper => {
       const results = [];

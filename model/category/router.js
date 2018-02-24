@@ -18,6 +18,9 @@ router.route('/category')
 router.route('/paper')
   .post((...args) => controller.findPaper(...args));
 
+router.route('/paper-details')
+  .post((...args) => controller.findPaperDetails(...args));
+
 router.route('/:id')
   .put((...args) => controller.update(...args))
   .get((...args) => controller.findById(...args))
