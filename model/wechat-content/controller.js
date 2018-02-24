@@ -1,6 +1,46 @@
 const Controller = require('../../lib/controller');
 const wechatContentFacade = require('./facade');
+const moment = require('moment');
 
-class WechatContentController extends Controller {}
+class WechatContentController extends Controller {
+    find(req, res, next) {
+        const data = {};
+        _.assign(data, req.body, req.params, req.query)
+        this.facade.count(data)
+          .then(rows => {
+            if (rows > 0) {
+              const pageCount = Math.ceil(rows / +req.query.limit)
+              this.facade.find(req.query)
+                .then(collection => {
+                  if (req.body.original && req.body.original === 'mapp') {
+                    for(let i = 0, len = collection.length; i < len; i++) {
+                      collection[i].content = collection[i].content.replace(/<[^>]+>/g,"")
+                      collection[i].createdAt = moment(collection[i].createdAt, 'YYYY/MM/DD')
+                    }
+                  }
+                  res.status(200).json({
+                    code: 0, 
+                    data: {
+                      list: collection,
+                      total: rows,
+                      pageCount: pageCount
+                    }
+                  })
+                })
+                .catch(err => next(err));
+            } else {
+              res.status(200).json({
+                code: 0,
+                data: {
+                  list: [],
+                  total: 0,
+                  pageCount: 0
+                },
+              })
+            }
+          })
+          .catch(err => next(err));
+      }
+}
 
 module.exports = new WechatContentController(wechatContentFacade);
