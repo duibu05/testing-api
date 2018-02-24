@@ -18,7 +18,7 @@ class WechatContentController extends Controller {
                   if (req.body.original && req.body.original === 'mapp') {
                     for(let i = 0, len = collection.length; i < len; i++) {
                       collection[i].content = collection[i].content.replace(/<[^>]+>/g,"")
-                      collection[i].createdAt = moment(collection[i].createdAt, 'YYYY/MM/DD')
+                      collection[i].createdAt = moment(collection[i].createdAt).format('YYYY/MM/DD')
                     }
                   }
                   res.status(200).json({
