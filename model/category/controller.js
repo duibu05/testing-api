@@ -99,7 +99,8 @@ class CategoryController extends Controller {
           results.push({
             _id: paper[i]._id,
             title: paper[i].title,
-            progress: '14/100'
+            progress: '14/100',
+            percentage: Math.round(14 / 100 * 100)
           })
         }
 
@@ -130,7 +131,8 @@ class CategoryController extends Controller {
           _id: cats[i]._id,
           name: cats[i].name,
           image: cats[i].image,
-          progress: '15/255'
+          progress: '15/255',
+          percentage: Math.round(15 / 255 * 100)
         })
       }
 
