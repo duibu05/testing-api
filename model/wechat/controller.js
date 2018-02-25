@@ -34,6 +34,10 @@ class WechatController extends Controller {
             }).catch(err => next(err));
         } else {
           data.userinfo = {};
+          data.history = {
+            "questionSize": 0,
+            "correctRate": "0%"
+          };
           res.status(200).json({
             code: 0,
             msg: 'ok',
