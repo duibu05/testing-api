@@ -107,8 +107,8 @@ class CategoryController extends Controller {
         Promise.all(pArr).then((rArr) => {
           for(let j = 0, len = rArr.length; j < len; j++) {
             const result = {
-              _id: paper[i]._id,
-              title: paper[i].title,
+              _id: paper[j]._id,
+              title: paper[j].title,
             }
 
             if (rArr[j]) {
