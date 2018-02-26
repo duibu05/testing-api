@@ -13,10 +13,11 @@ class CategoryController extends Controller {
       paperHistoryFacade.findOne({ openId: req.body.openId, paperId: req.body.paperId, status: 1 })
     ]).then(([question, paper, paperHistory]) => {
       const point = (() => {
-        let point = 0
+        let point = 0, progress = 0
         for (let j = 0, len = paper.questions.length; j < len; j++) {
           if (paper.questions[j].id === req.body.questionId) {
             point = paper.questions[j].point 
+            progress = j + 1
             break;
           }
         }
@@ -31,13 +32,15 @@ class CategoryController extends Controller {
             paperHistory.questionsHistory[i].userAnswer = userSelectedAnswer
             paperHistory.questionsHistory[i].point = point
             paperHistory.questionSize = paper.questions.length
+            paperHistory.progress = paperHistory.progress > progress ? paperHistory.progress : progress
 
             break;
           }
         }
         paperHistoryFacade.update({ _id: paperHistory._id }, {
           questionsHistory: paperHistory.questionsHistory,
-          questionSize: paperHistory.questionSize
+          questionSize: paperHistory.questionSize,
+          progress: questionHistory.progress
         })
       } else {
         const questionHistory = {
@@ -92,22 +95,35 @@ class CategoryController extends Controller {
   findPaper(req, res, next) {
     paperFacade.find({ 'firstCat.id': req.body.targetId, 'secondCat.id': req.body.subjectId, 'thirdCat.id': req.body.categoryId }).then(paper => {
       const results = [];
+      const pArr = [];
+      const rArr = [];
       if (paper) {
         
         for (let i = 0, len = paper.length; i < len; i++) {
-          
-          results.push({
-            _id: paper[i]._id,
-            title: paper[i].title,
-            progress: '14/100',
-            percentage: Math.round(14 / 100 * 100)
-          })
+          pArr.push(paperHistoryFacade.findOne({ paperId: paper[i]._id, openId: req.body.openId, status: 1 }).catch(e => 0))
+          rArr.push(`r${i}`)
         }
 
-        res.json({
-          code: 0,
-          msg: 'ok',
-          data: results
+        Promise.all(pArr).then((rArr) => {
+          for(let j = 0, len = rArr.length; j < len; j++) {
+            const result = {
+              _id: paper[i]._id,
+              title: paper[i].title,
+            }
+
+            if (rArr[j]) {
+              result.progress = `${rArr[j].progress}/${rArr[j].questionSize}`
+              result.percentage = Math.round(rArr[j].progress / rArr[j].questionSize * 100)
+            }
+
+            results.push(result)
+          }
+
+          res.json({
+            code: 0,
+            msg: 'ok',
+            data: results
+          })
         })
       }
     });
@@ -126,20 +142,45 @@ class CategoryController extends Controller {
   findCategory(req, res, next) {
     categoryFacade.find({ type: 'shijuan', level: 'third' }).then(cats => {
       const results = [];
+      const pArr = [];
+      const rArr = [];
       for(let i = 0, len = cats.length; i < len; i++) {
-        results.push({
-          _id: cats[i]._id,
-          name: cats[i].name,
-          image: cats[i].image,
-          progress: '15/255',
-          percentage: Math.round(15 / 255 * 100)
-        })
+        pArr.push(paperFacade.find({ 'thirdCat.id': cats[i]._id }, '_id').catch(e => 0))
+        rArr.push(`r${i}`)
       }
 
-      res.json({
-        code: 0,
-        msg: 'ok!',
-        data: results
+      Promise.all(pArr).then((rArr) => {
+        const ppArr = [];
+        const rrArr = [];
+        for (let j = 0, jLen = rArr.length; j < jLen; j++) {
+          const idArr = rArr[j].map(v => v._id)
+          ppArr.push(paperHistoryFacade.find({ paperId: { $in, idArr }, openId: req.body.openId, status: 1 }, 'progress questionSize').catch(e => 0))
+          rrArr.push(`rr${j}`)
+        }
+
+        Promise.all(ppArr).then((rrArr) => {
+          for (let k = 0, kLen = rrArr.length; k < kLen; k++) {
+            const pr = rrArr[k].reduce((pre, cur) => {
+              pre.progress += cur.progress
+              pre.questionSize += cur.questionSize
+              return pre
+            })
+
+            results.push({
+              _id: cats[k]._id,
+              name: cats[k].name,
+              image: cats[k].image,
+              progress: `${pr.progress}/${pr.questionSize}`,
+              percentage: Math.round(pr.progress / pr.questionSize * 100)
+            })
+          }
+
+          res.json({
+            code: 0,
+            msg: 'ok!',
+            data: results
+          })
+        })
       })
     })
   }

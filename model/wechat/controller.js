@@ -50,7 +50,7 @@ class WechatController extends Controller {
   }
 
   aboutUs(req, res, next) {
-    aboutUsFacade.find({ page: 1, limit: 1 }).then(docs => {
+    aboutUsFacade.find({ page: 1, limit: 1 }).sort('-timestamp').then(docs => {
       res.json({
         code: 0,
         msg: 'ok',
