@@ -165,7 +165,7 @@ class CategoryController extends Controller {
               name: cats[k].name,
               image: cats[k].image
             }
-            if (rrArr[k]) {
+            if (rrArr[k] && rrArr[k].length) {
               const pr = rrArr[k].reduce((pre, cur) => {
                 pre.progress += cur.progress
                 pre.questionSize += cur.questionSize
