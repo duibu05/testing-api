@@ -18,9 +18,10 @@ class PaperController extends Controller {
       if (!exist) {
         for (let l = 0, llen = paper.questions.length; l < llen; l++) {
           if (req.body.currentQuestionId === paper.questions[l].id) {
-            question.userAnswer = userAnswer
-            question.points = +paper.questions[l].points
-            paperHistory.questionsHistory.push(question)
+            const temQuestion = JSON.parse(JSON.stringify(question))
+            temQuestion.userAnswer = userAnswer
+            temQuestion.points = +paper.questions[l].points
+            paperHistory.questionsHistory.push(temQuestion)
             break;
           }
         }
