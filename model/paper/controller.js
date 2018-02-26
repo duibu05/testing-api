@@ -23,6 +23,7 @@ class PaperController extends Controller {
             questions[i].userAnswer = req.body.currentUserAnswer.split(',')
         }
         if (questions[i].userAnswer.sort().join(',') === questions[i].rightAnswer.sort().join(',')) {
+            console.log(questions[i].points)
             userScore += +questions[i].points
             right += 1
         }
