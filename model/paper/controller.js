@@ -36,7 +36,7 @@ class PaperController extends Controller {
         correctRate: correctPercentage
       }), paperHistoryFacade.update({ _id: paperHistory._id }, {
         status: 2,
-        score: userScore,
+        score: +userScore,
         questionsHistory: paperHistory.questionsHistory,
         progress: paper.questions.length,
         questionSize: paper.questions.length
