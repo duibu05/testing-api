@@ -19,7 +19,7 @@ class PaperController extends Controller {
         for (let l = 0, llen = paper.questions.length; l < llen; l++) {
           if (req.body.currentQuestionId === paper.questions[l].id) {
             question.userAnswer = userAnswer
-            question.points = paper.question[l].points
+            question.points = +paper.question[l].points
             paperHistory.questionsHistory.push(question)
             break;
           }
