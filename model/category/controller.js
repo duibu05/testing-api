@@ -154,7 +154,7 @@ class CategoryController extends Controller {
         const rrArr = [];
         for (let j = 0, jLen = rArr.length; j < jLen; j++) {
           const idArr = rArr[j].map(v => v._id)
-          ppArr.push(paperHistoryFacade.find({ paperId: { $in, idArr }, openId: req.body.openId, status: 1 }, 'progress questionSize').catch(e => 0))
+          ppArr.push(paperHistoryFacade.find({ paperId: { $in: idArr }, openId: req.body.openId, status: 1 }, 'progress questionSize').catch(e => 0))
           rrArr.push(`rr${j}`)
         }
 
