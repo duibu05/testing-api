@@ -22,8 +22,8 @@ class WechatController extends Controller {
           data.userinfo = p2;
           historyFacade.findOne({ openId: req.body.openId }).then(history => {
               data.history = history || {
-                "questionSize": 0,
-                "correctRate": "0%"
+                questionSize: 0,
+                correctRate: "0%"
               };
               
               res.status(200).json({
@@ -35,8 +35,8 @@ class WechatController extends Controller {
         } else {
           data.userinfo = {};
           data.history = {
-            "questionSize": 0,
-            "correctRate": "0%"
+            questionSize: 0,
+            correctRate: "0%"
           };
           res.status(200).json({
             code: 0,

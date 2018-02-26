@@ -7,6 +7,13 @@ class PaperController extends Controller {
   commit(req, res, next) {
     // 交卷： 计算得分 设置试卷记录状态等
     Promise.all([paperFacade.findOne({ _id: req.body.paperId }), paperHistoryFacade.findOne({ paperId: req.body.paperId, status: 1 }), historyFacade.findOne({ openId: req.body.openId })]).then(([paper, paperHistory, history]) => {
+      if (!history) {
+        history = {
+          questionSize: 0,
+          rightQuestionSize: 0,
+          correctRate: '0%'
+        }
+      }
       let correctPercentage = '', total = paper.questions.length + history.questionSize, right = history.rightQuestionSize, userScore = 0, questions = paperHistory.questionsHistory || [];
 
       for (let i = 0, len = questions.length; i < len; i++) {
