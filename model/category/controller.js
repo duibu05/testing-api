@@ -40,7 +40,7 @@ class CategoryController extends Controller {
         paperHistoryFacade.update({ _id: paperHistory._id }, {
           questionsHistory: paperHistory.questionsHistory,
           questionSize: paperHistory.questionSize,
-          progress: questionHistory.progress
+          progress: paperHistory.progress
         })
       } else {
         const questionHistory = {
