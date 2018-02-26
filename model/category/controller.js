@@ -160,19 +160,22 @@ class CategoryController extends Controller {
 
         Promise.all(ppArr).then((rrArr) => {
           for (let k = 0, kLen = rrArr.length; k < kLen; k++) {
-            const pr = rrArr[k].reduce((pre, cur) => {
-              pre.progress += cur.progress
-              pre.questionSize += cur.questionSize
-              return pre
-            })
-
-            results.push({
+            const result = {
               _id: cats[k]._id,
               name: cats[k].name,
-              image: cats[k].image,
-              progress: `${pr.progress}/${pr.questionSize}`,
-              percentage: Math.round(pr.progress / pr.questionSize * 100)
-            })
+              image: cats[k].image
+            }
+            if (rrArr[k]) {
+              const pr = rrArr[k].reduce((pre, cur) => {
+                pre.progress += cur.progress
+                pre.questionSize += cur.questionSize
+                return pre
+              })
+
+              result.progress = `${pr.progress}/${pr.questionSize}`,
+              result.percentage = Math.round(pr.progress / pr.questionSize * 100)
+            }
+            results.push(result)
           }
 
           res.json({
