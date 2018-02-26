@@ -2,11 +2,30 @@ const Controller = require('../../lib/controller');
 const paperFacade = require('./facade');
 const paperHistoryFacade = require('../paper-history/facade');
 const historyFacade = require('../history/facade');
+const questionFacade = require('../question/facade');
 
 class PaperController extends Controller {
   commit(req, res, next) {
     // 交卷： 计算得分 设置试卷记录状态等
-    Promise.all([paperFacade.findOne({ _id: req.body.paperId }), paperHistoryFacade.findOne({ paperId: req.body.paperId, status: 1 }), historyFacade.findOne({ openId: req.body.openId })]).then(([paper, paperHistory, history]) => {
+    Promise.all([
+      paperFacade.findOne({ _id: req.body.paperId }), 
+      paperHistoryFacade.findOne({ paperId: req.body.paperId, status: 1 }), 
+      historyFacade.findOne({ openId: req.body.openId }),
+      questionFacade.findById(req.body.currentQuestionId)
+    ]).then(([paper, paperHistory, history, question]) => {
+      const exist = paperHistory.questionsHistory.filter(v => v._id === req.body.currentQuestionId).length
+      const userAnswer = req.body.currentUserAnswer.split(',')
+      if (!exist) {
+        for (let l = 0, llen = paper.questions.length; l < llen; l++) {
+          if (req.body.currentQuestionId === paper.questions[l].id) {
+            question.userAnswer = userAnswer
+            question.points = paper.question[l].points
+            paperHistory.questionsHistory.push(question)
+            break;
+          }
+        }
+      }
+      
       if (!history) {
         history = {
           openId: req.body.openId,
@@ -20,7 +39,7 @@ class PaperController extends Controller {
 
       for (let i = 0, len = questions.length; i < len; i++) {
         if (req.body.currentQuestionId === questions[i].id) {
-            questions[i].userAnswer = req.body.currentUserAnswer.split(',')
+            questions[i].userAnswer = userAnswer
         }
         if (questions[i].userAnswer.sort().join(',') === questions[i].rightAnswer.sort().join(',')) {
             userScore += +(questions[i].points || 0)
