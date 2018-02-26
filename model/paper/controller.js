@@ -9,10 +9,12 @@ class PaperController extends Controller {
     Promise.all([paperFacade.findOne({ _id: req.body.paperId }), paperHistoryFacade.findOne({ paperId: req.body.paperId, status: 1 }), historyFacade.findOne({ openId: req.body.openId })]).then(([paper, paperHistory, history]) => {
       if (!history) {
         history = {
+          openId: req.body.openId,
           questionSize: 0,
           rightQuestionSize: 0,
           correctRate: '0%'
         }
+        historyFacade.create(history)
       }
       let correctPercentage = '', total = paper.questions.length + history.questionSize, right = history.rightQuestionSize, userScore = 0, questions = paperHistory.questionsHistory || [];
 
