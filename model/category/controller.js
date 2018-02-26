@@ -12,17 +12,17 @@ class CategoryController extends Controller {
       paperFacade.findById(req.body.paperId),
       paperHistoryFacade.findOne({ openId: req.body.openId, paperId: req.body.paperId, status: 1 })
     ]).then(([question, paper, paperHistory]) => {
-      const point = (() => {
-        let point = 0, progress = 0
+      const points = (() => {
+        let points = 0, progress = 0
         for (let j = 0, len = paper.questions.length; j < len; j++) {
           if (paper.questions[j].id === req.body.questionId) {
-            point = paper.questions[j].point 
+            points = paper.questions[j].points 
             progress = j + 1
             break;
           }
         }
 
-        return point
+        return points
       })()
       const userSelectedAnswer = req.body.userAnswer.split(',')
 
@@ -30,7 +30,7 @@ class CategoryController extends Controller {
         for (let i = 0, len = paperHistory.questionsHistory.length; i < len; i++) {
           if (paperHistory.questionsHistory[i].id === req.body.questionId) {
             paperHistory.questionsHistory[i].userAnswer = userSelectedAnswer
-            paperHistory.questionsHistory[i].point = point
+            paperHistory.questionsHistory[i].points = points
             paperHistory.questionSize = paper.questions.length
             paperHistory.progress = paperHistory.progress > progress ? paperHistory.progress : progress
 
@@ -45,7 +45,7 @@ class CategoryController extends Controller {
       } else {
         const questionHistory = {
           userAnswer: userSelectedAnswer,
-          point: point,
+          points: points,
         }
 
         _.assign(questionHistory, JSON.parse(JSON.stringify(question)))
