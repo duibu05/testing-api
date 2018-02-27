@@ -112,8 +112,13 @@ class CategoryController extends Controller {
             }
 
             if (rArr[j]) {
-              result.progress = `${rArr[j].progress}/${rArr[j].questionSize}`
-              result.percentage = Math.round(rArr[j].progress / rArr[j].questionSize * 100)
+              result.progress = `${rArr[j].progress}/${paper[j].questionSize}`
+              result.lastAnsweredQuestionIndex = rArr[j].progress
+              result.percentage = Math.round(rArr[j].progress / paper[j].questionSize * 100)
+            } else {
+              result.progress = `0/${paper[j].questionSize}`
+              result.lastAnsweredQuestionIndex = 0
+              result.percentage = 0
             }
 
             results.push(result)
@@ -145,15 +150,17 @@ class CategoryController extends Controller {
       const pArr = [];
       const rArr = [];
       for(let i = 0, len = cats.length; i < len; i++) {
-        pArr.push(paperFacade.find({ 'thirdCat.id': cats[i]._id }, '_id').catch(e => 0))
+        pArr.push(paperFacade.find({ 'thirdCat.id': cats[i]._id }).catch(e => 0))
         rArr.push(`r${i}`)
       }
 
       Promise.all(pArr).then((rArr) => {
         const ppArr = [];
         const rrArr = [];
+        const catQuestionSizeArr = []
         for (let j = 0, jLen = rArr.length; j < jLen; j++) {
           const idArr = rArr[j].map(v => v._id)
+          catQuestionSizeArr.push(rArr[j].reduce((pre, cur) => pre.questions.length + cur.questions.length))
           ppArr.push(paperHistoryFacade.find({ paperId: { $in: idArr }, openId: req.body.openId, status: 1 }, 'progress questionSize').catch(e => 0))
           rrArr.push(`rr${j}`)
         }
@@ -172,8 +179,13 @@ class CategoryController extends Controller {
                 return pre
               })
 
-              result.progress = `${pr.progress}/${pr.questionSize}`,
-              result.percentage = Math.round(pr.progress / pr.questionSize * 100)
+              result.progress = `${pr.progress}/${catQuestionSizeArr[k]}`
+              result.lastAnsweredQuestionIndex = pr.progress
+              result.percentage = Math.round(pr.progress / catQuestionSizeArr[k] * 100)
+            } else {
+              result.progress = `0/${catQuestionSizeArr[k]}`
+              result.lastAnsweredQuestionIndex = 0
+              result.percentage = 0
             }
             results.push(result)
           }
