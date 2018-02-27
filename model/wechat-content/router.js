@@ -7,7 +7,7 @@ router.route('/')
   .post((...args) => controller.create(...args));
 
 router.route('/list')
-  .post((...args) => controller.find(...args));
+  .post((...args) => controller.list(...args));
 
 router.route('/detail')
   .post((...args) => controller.findById(...args));
