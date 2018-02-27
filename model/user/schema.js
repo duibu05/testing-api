@@ -26,6 +26,13 @@ const userSchema = new Schema({
   }
 });
 
+userSchema.pre('save', function(next) {
+  if (!this.meta.createdAt) this.meta.createdAt = new Date;
+  if (!this.meta.timestamp) this.meta.timestamp = Date.now()
+
+  next();
+})
+
 userSchema.pre('save', function (next) {
   let user = this;
 

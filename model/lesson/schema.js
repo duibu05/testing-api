@@ -22,6 +22,7 @@ const lessonSchema = new Schema({
 
 lessonSchema.pre('save', function(next) {
   if(!this.createdAt) this.createdAt = new Date;
+  if(!this.timestamp) this.timestamp = Date.now()
   next();
 })
 
