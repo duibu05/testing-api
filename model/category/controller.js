@@ -174,7 +174,7 @@ class CategoryController extends Controller {
       const pArr = [];
       const rArr = [];
       for(let i = 0, len = cats.length; i < len; i++) {
-        pArr.push(paperFacade.find({ 'thirdCat.id': cats[i]._id, 'firstCat.id': req.body.targetId, 'secondCat': req.body.subjectId }).catch(e => 0))
+        pArr.push(paperFacade.find({ 'thirdCat.id': cats[i]._id, 'firstCat.id': req.body.targetId, 'secondCat.id': req.body.subjectId }).catch(e => 0))
         rArr.push(`r${i}`)
       }
 
