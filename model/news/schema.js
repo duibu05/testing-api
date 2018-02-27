@@ -17,6 +17,7 @@ const newsSchema = new Schema({
 newsSchema.pre('save', function(next) {
   if(!this.createdAt) this.createdAt = new Date;
   if(!this.timestamp) this.timestamp = Date.now()
+  console.log(this.createdAt, this.timestamp)
   next();
 })
 
