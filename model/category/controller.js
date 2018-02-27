@@ -93,19 +93,23 @@ class CategoryController extends Controller {
             })
           } else {
             const resPaper = JSON.parse(JSON.stringify(paper))
+
             for (let i = 0, len = history.questionsHistory.length; i < len; i++) {
               for (let j = 0, jlen = resPaper.questions.length; j < jlen; j++) {
-                if (history.questionsHistory[i].id == resPaper.questions[j].id) {
+                if (history.questionsHistory[i]._id == resPaper.questions[j].id) {
                   resPaper.questions[j] = history.questionsHistory[i]
                   break;
                 }
               }
             }
 
-            res.json({
-              code: 0,
-              msg: 'ok',
-              data: resPaper
+            questionFacade.findById(resPaper.questions[history.progress].id).then(que => {
+              resPaper.questions[history.progress].details = que
+              res.json({
+                code: 0,
+                msg: 'ok',
+                data: resPaper
+              })
             })
           }
         })
