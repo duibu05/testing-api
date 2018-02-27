@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
+const moment = require('moment');
 
 const userSchema = new Schema({
   account: { type: String, required: true, unique: true },
@@ -27,8 +28,8 @@ const userSchema = new Schema({
 });
 
 userSchema.pre('save', function(next) {
-  if (!this.meta.createdAt) this.meta.createdAt = new Date;
-  if (!this.meta.timestamp) this.meta.timestamp = Date.now()
+  if (!this.meta.createdAt) this.meta.createdAt = moment();
+  if (!this.meta.timestamp) this.meta.timestamp = +moment().format('x')
 
   next();
 })
