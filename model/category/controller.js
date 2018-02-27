@@ -180,11 +180,9 @@ class CategoryController extends Controller {
               })
 
               result.progress = `${pr.progress}/${catQuestionSizeArr[k]}`
-              result.lastAnsweredQuestionIndex = pr.progress
               result.percentage = Math.round(pr.progress / catQuestionSizeArr[k] * 100)
             } else {
               result.progress = `0/${catQuestionSizeArr[k]}`
-              result.lastAnsweredQuestionIndex = 0
               result.percentage = 0
             }
             results.push(result)
