@@ -179,8 +179,7 @@ class CategoryController extends Controller {
       }
 
       Promise.all(pArr).then((rArr) => {
-        console.log(pArr)
-        console.log(rArr)
+        console.log(rArr[0])
         const ppArr = [];
         const rrArr = [];
         const catQuestionSizeArr = []
