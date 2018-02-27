@@ -198,8 +198,8 @@ class CategoryController extends Controller {
 
           let totalLen = 0
           if(rArr[j]) {
-            for(let k = 0, klen = rArr[j].questions; k < klen; k++) {
-              totalLen += rArr[j].questions.length
+            for(let k = 0, klen = rArr[j].length; k < klen; k++) {
+              totalLen += rArr[j][k].questions.length
             }
           }
           catQuestionSizeArr.push(totalLen)
