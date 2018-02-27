@@ -133,6 +133,7 @@ class CategoryController extends Controller {
             const result = {
               _id: paper[j]._id,
               title: paper[j].title,
+              image: paper[j].image
             }
 
             if (rArr[j] && paper[j].questions.length) {
