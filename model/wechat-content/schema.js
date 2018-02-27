@@ -16,8 +16,8 @@ const wechatContentSchema = new Schema({
 });
 
 wechatContentSchema.pre('save', function(next) {
-  if(!this.createdAt) this.createdAt = moment();
-  if(!this.timestamp) this.timestamp = +moment().format('x')
+  this.createdAt = moment();
+  this.timestamp = +moment().format('x')
   next();
 })
 

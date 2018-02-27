@@ -14,8 +14,8 @@ const qiniuUpTokenSchema = new Schema({
 });
 
 qiniuUpTokenSchema.pre('save', function (next) {
-  if (!this.meta.createdAt) this.meta.createdAt = moment();
-  if (!this.meta.timestamp) this.meta.timestamp = +moment().format('x')
+  this.meta.createdAt = moment();
+  this.meta.timestamp = +moment().format('x')
 
   next();
 })
