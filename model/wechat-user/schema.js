@@ -19,6 +19,9 @@ const wechatUserSchema = new Schema({
 wechatUserSchema.pre('save', function(next) {
   if(!this.createdAt) this.createdAt = new Date;
   if(!this.timestamp) this.timestamp = Date.now()
+  if(this.avator == 'undefined' || this.avator == undefined) {
+    next(new Error('数据不完整！！！'))
+  }
   next();
 })
 
