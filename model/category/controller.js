@@ -113,17 +113,6 @@ class CategoryController extends Controller {
             })
           }
         })
-
-      questionFacade.findById(paper.questions[0].id).then(question => {
-        if (question) {
-          paper.questions[0].details = question
-        }
-        res.json({
-          code: 0,
-          msg: 'ok!',
-          data: paper
-        })
-      })
     })
   }
 
