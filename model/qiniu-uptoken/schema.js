@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const moment = require('moment');
 
 const qiniuUpTokenSchema = new Schema({
   token: { type: String, required: true },
@@ -14,8 +13,8 @@ const qiniuUpTokenSchema = new Schema({
 });
 
 qiniuUpTokenSchema.pre('save', function (next) {
-  this.meta.createdAt = moment();
-  this.meta.timestamp = +moment().format('x')
+  this.meta.createdAt = new Date();
+  this.meta.timestamp = Date.now();
 
   next();
 })

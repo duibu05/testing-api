@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const moment = require('moment');
 
 const roleSchema = new Schema({
   name: { type: String, required: [true, '角色名称必填！'], unique: true },
@@ -10,8 +9,8 @@ const roleSchema = new Schema({
 });
 
 roleSchema.pre('save', function(next) {
-  this.createdAt = moment();
-  this.timestamp = +moment().format('x')
+  this.createdAt = new Date();
+  this.timestamp = Date.now();
   next();
 })
 

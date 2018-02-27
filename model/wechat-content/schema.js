@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const moment = require('moment');
 
 const wechatContentSchema = new Schema({
   title: { type: String, required: [true, '标题必填！']},
@@ -16,8 +15,8 @@ const wechatContentSchema = new Schema({
 });
 
 wechatContentSchema.pre('save', function(next) {
-  this.createdAt = moment();
-  this.timestamp = +moment().format('x')
+  this.createdAt = new Date();
+  this.timestamp = Date.now();
   next();
 })
 

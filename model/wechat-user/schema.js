@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const moment = require('moment');
 
 const wechatUserSchema = new Schema({
   avator: { type: String, required: true },
@@ -17,8 +16,8 @@ const wechatUserSchema = new Schema({
 });
 
 wechatUserSchema.pre('save', function(next) {
-  this.createdAt = moment();
-  this.timestamp = +moment().format('x')
+  this.createdAt = new Date();
+  this.timestamp = Date.now();
   if(this.avator == 'undefined' || this.avator == undefined) {
     next(new Error('数据不完整！！！'))
   }

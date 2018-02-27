@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const moment = require('moment');
 
 const paperSchema = new Schema({
   title: { type: String, required: true },
@@ -23,8 +22,8 @@ const paperSchema = new Schema({
 });
 
 paperSchema.pre('save', function(next) {
-  this.createdAt = moment();
-  this.timestamp = +moment().format('x')
+  this.createdAt = new Date();
+  this.timestamp = Date.now();
   next();
 })
 
