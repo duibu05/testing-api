@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const moment = require('moment');
 
 const newsSchema = new Schema({
   title: { type: String, required: true },
@@ -17,7 +17,7 @@ const newsSchema = new Schema({
 newsSchema.pre('save', function(next) {
   if(!this.createdAt) this.createdAt = new Date;
   if(!this.timestamp) this.timestamp = Date.now()
-  console.log(this.createdAt, this.timestamp)
+  console.log(this.createdAt, this.timestamp, moment().format(), moment().format('X'), moment().format('x'))
   next();
 })
 
