@@ -23,9 +23,10 @@ const dealWithParams = function(req, res, next) {
               req.body.name = user.nickname
               req.body.cellphone = user.cellphone
             }
+
+            next();
           });
         }
-        next();
       }).catch(err => next(err));
     }
   } else {

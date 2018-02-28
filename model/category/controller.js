@@ -97,7 +97,7 @@ class CategoryController extends Controller {
             for (let i = 0, len = history.questionsHistory.length; i < len; i++) {
               for (let j = 0, jlen = resPaper.questions.length; j < jlen; j++) {
                 if (history.questionsHistory[i]._id == resPaper.questions[j].id) {
-                  resPaper.questions[j] = history.questionsHistory[i]
+                  resPaper.questions[j].details = history.questionsHistory[i]
                   break;
                 }
               }
