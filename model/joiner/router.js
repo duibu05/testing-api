@@ -22,7 +22,7 @@ const dealWithParams = function(req, res, next) {
             wechatUser.findOne({ openId: req.body.openId }).then(user => {
               if(user) {
                 req.body.name = user.nickname
-                req.body.cellphone = user.cellphone
+                req.body.cellphone = user.phone
               } else {
                 next(new Error('用户不存在，可能未绑定！！！'));
               }
