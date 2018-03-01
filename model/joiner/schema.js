@@ -8,6 +8,7 @@ const joinerSchema = new Schema({
   openId: { type: String, required: false },
   from: { type: String, required: true },
   joinAt: { type: Date },
+  timestamp: { type: Number },
   joinIn: {
     sn: { type: String, required: true },
     category: { type: String, required: true },
@@ -17,7 +18,8 @@ const joinerSchema = new Schema({
 });
 
 joinerSchema.pre('save', function(next) {
-  if (!this.joinAt) this.joinAt = new Date;
+  this.joinAt = new Date;
+  this.timestamp = Date.now();
   
   next();
 });

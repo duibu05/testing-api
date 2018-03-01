@@ -18,14 +18,20 @@ const dealWithParams = function(req, res, next) {
             post: doc.post
           }
 
-          wechatUser.findOne({ openId: req.body.openId }).then(user => {
-            if(user) {
-              req.body.name = user.nickname
-              req.body.cellphone = user.cellphone
-            }
-
-            next();
-          });
+          if (req.body.openId) {
+            wechatUser.findOne({ openId: req.body.openId }).then(user => {
+              if(user) {
+                req.body.name = user.nickname
+                req.body.cellphone = user.cellphone
+              } else {
+                next(new Error('用户不存在，可能未绑定！！！'));
+              }
+  
+              next();
+            });
+          } else {
+            next(new Error('openId不能为空！！！'));
+          }
         }
       }).catch(err => next(err));
     }
