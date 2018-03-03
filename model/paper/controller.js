@@ -6,6 +6,7 @@ const questionFacade = require('../question/facade');
 
 class PaperController extends Controller {
   commit(req, res, next) {
+    console.log(req.body)
     // 交卷： 计算得分 设置试卷记录状态等
     Promise.all([
       paperFacade.findOne({ _id: req.body.paperId }), 
@@ -13,6 +14,7 @@ class PaperController extends Controller {
       historyFacade.findOne({ openId: req.body.openId }),
       questionFacade.findById(req.body.currentQuestionId)
     ]).then(([paper, paperHistory, history, question]) => {
+      console.log('history:', history)
       const exist = paperHistory.questionsHistory.filter(v => v._id === req.body.currentQuestionId).length
       const userAnswer = req.body.currentUserAnswer.split(',')
       if (!exist) {

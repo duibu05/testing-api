@@ -69,7 +69,7 @@ class CategoryController extends Controller {
           status: 1,
           openId: req.body.openId,
         }).then(result => {
-          console.log('update paper history:', result);
+          console.log('create paper history:', result);
           res.json({
             code: 0,
             msg: 'ok!',
