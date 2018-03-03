@@ -12,7 +12,7 @@ class CategoryController extends Controller {
       questionFacade.findById(req.body.questionId), 
       paperFacade.findById(req.body.paperId),
       paperHistoryFacade.findOne({ openId: req.body.openId, paperId: req.body.paperId, status: 1 }),
-      questionFacade.findNextQuestion(req.body.questionId)
+      questionFacade.findNextQuestion(req.body.questionId, req.body.paperId)
     ]).then(([question, paper, paperHistory, nextQuestion]) => {
       const points = (() => {
         let points = 0, progress = 0, idx = 0
