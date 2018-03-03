@@ -11,14 +11,16 @@ class CategoryController extends Controller {
     Promise.all([
       questionFacade.findById(req.body.questionId), 
       paperFacade.findById(req.body.paperId),
-      paperHistoryFacade.findOne({ openId: req.body.openId, paperId: req.body.paperId, status: 1 })
-    ]).then(([question, paper, paperHistory]) => {
+      paperHistoryFacade.findOne({ openId: req.body.openId, paperId: req.body.paperId, status: 1 }),
+      questionFacade.findPrevQuestion(req.body.questionId)
+    ]).then(([question, paper, paperHistory, prevQuestion]) => {
       const points = (() => {
-        let points = 0, progress = 0
+        let points = 0, progress = 0, idx = 0
         for (let j = 0, len = paper.questions.length; j < len; j++) {
           if (paper.questions[j].id === req.body.questionId) {
-            points = paper.questions[j].points 
-            progress = j + 1
+            points = paper.questions[j-1].points 
+            progress = j
+            idx = j - 1
             break;
           }
         }
@@ -28,16 +30,26 @@ class CategoryController extends Controller {
       const userSelectedAnswer = req.body.userAnswer.split(',')
 
       if (paperHistory) {
+        let notExist = true
         for (let i = 0, len = paperHistory.questionsHistory.length; i < len; i++) {
           if (paperHistory.questionsHistory[i]._id === req.body.questionId) {
+            notExist = false;
             paperHistory.questionsHistory[i].userAnswer = userSelectedAnswer
             paperHistory.questionsHistory[i].points = points
-            paperHistory.questionSize = paper.questions.length
-            paperHistory.progress = paperHistory.progress > progress ? paperHistory.progress : progress
 
             break;
           }
         }
+
+        if (notExist) {
+          paperHistory.progress += 1
+          const prevQObj = JSON.parse(JSON.stringify(prevQuestion))
+          prevQObj.points = points
+          prevQObj.userAnswer = userSelectedAnswer
+          paperHistory.questionsHistory.push(prevQObj)
+        }
+
+        paperHistory.questionSize = paper.questions.length
 
         console.log('new paper history', paperHistory)
 
