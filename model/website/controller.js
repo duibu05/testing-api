@@ -1,4 +1,5 @@
-const _ = require('lodash')
+const _ = require('lodash');
+const moment = require('moment');
 const Controller = require('../../lib/controller');
 const websiteIndexFacade = require('./facade');
 const carouselMgmtFacade = require('../carousel-mgmt/facade');
@@ -16,7 +17,10 @@ class WebsiteIndexController extends Controller {
       .then(([p1, p2, p3]) => {
         const data = {
           recommended: _.groupBy(p1, 'cat'),
-          newsList: p2,
+          newsList: p2.filter(v => {
+            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
+            return true
+          }),
           sidebar: p3
         }
         res.status(200).json({
@@ -45,7 +49,10 @@ class WebsiteIndexController extends Controller {
         const data = {
           recommended: _.groupBy(p2, 'cat'),
           categoryList: p1,
-          lesson: p3
+          lesson: p3.filter(v => {
+            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD');
+            return true
+          })
         }
         res.status(200).json({
           code: 0,
@@ -61,7 +68,10 @@ class WebsiteIndexController extends Controller {
         const data = {
           recommended: _.groupBy(p2, 'cat'),
           categoryList: p1,
-          lesson: p3
+          lesson: p3.filter(v => {
+            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD');
+            return true
+          })
         }
         res.status(200).json({
           code: 0,
@@ -73,6 +83,7 @@ class WebsiteIndexController extends Controller {
 
   lessonDetails(req, res, next) {
     lessonFacade.findById(req.params.id).then(doc => {
+      doc.createdAt = moment(doc.createdAt).format('YYYY-MM-DD HH:mm');
       if (doc.releatedLesson.length) {
         lessonFacade.find({ _id: { $in: doc.releatedLesson } }).then(lessons => {
           doc.releatedLesson = lessons
@@ -100,7 +111,10 @@ class WebsiteIndexController extends Controller {
             code: 0,
             msg: 'ok',
             data: {
-              list: docs,
+              list: docs.filter(v => {
+                v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
+                return true
+              }),
               totalCount: result
             }
           })
@@ -123,12 +137,14 @@ class WebsiteIndexController extends Controller {
           Object.keys(doc.attachments).forEach(v => {
             arr.push({
               name: doc.attachments[v].name,
-              url: doc.attachments[v].url
+              url: `https://cdn.gdpassing.com/${doc.attachments[v].url}?attname=${encodeURIComponent(doc.attachments[v].name)}`
             })
           })
 
           doc.attachments = arr
         }
+
+        doc.createdAt = moment(doc.createdAt).format('YYYY-MM-DD HH:mm');
         res.json({
           code: 0,
           msg: 'ok',
@@ -145,7 +161,10 @@ class WebsiteIndexController extends Controller {
             code: 0,
             msg: 'ok',
             data: {
-              list: docs,
+              list: docs.filter(v => {
+                v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
+                return true
+              }),
               totalCount: result
             }
           })
@@ -167,12 +186,13 @@ class WebsiteIndexController extends Controller {
         Object.keys(doc.attachments).forEach(v => {
           arr.push({
             name: doc.attachments[v].name,
-            url: doc.attachments[v].url
+            url: `https://cdn.gdpassing.com/${doc.attachments[v].url}?attname=${encodeURIComponent(doc.attachments[v].name)}`
           })
         })
 
         doc.attachments = arr
       }
+      doc.createdAt = moment(doc.createdAt).format('YYYY-MM-DD HH:mm');
       res.json({
         code: 0,
         msg: 'ok',
