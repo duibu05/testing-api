@@ -55,7 +55,8 @@ class PaperController extends Controller {
       Promise.all([historyFacade.update({ openId: req.body.openId }, {
         questionSize: total,
         rightQuestionSize: right,
-        correctRate: correctPercentage
+        correctRate: correctPercentage,
+        openId: req.body.openId
       }), paperHistoryFacade.update({ _id: paperHistory._id }, {
         status: 2,
         score: +userScore,
