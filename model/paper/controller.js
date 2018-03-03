@@ -6,7 +6,6 @@ const questionFacade = require('../question/facade');
 
 class PaperController extends Controller {
   commit(req, res, next) {
-    console.log(req.body)
     // 交卷： 计算得分 设置试卷记录状态等
     Promise.all([
       paperFacade.findOne({ _id: req.body.paperId }), 
@@ -14,7 +13,6 @@ class PaperController extends Controller {
       historyFacade.findOne({ openId: req.body.openId }),
       questionFacade.findById(req.body.currentQuestionId)
     ]).then(([paper, paperHistory, history, question]) => {
-      console.log('history:', history)
       const exist = paperHistory.questionsHistory.filter(v => v._id === req.body.currentQuestionId).length
       const userAnswer = req.body.currentUserAnswer.split(',')
       if (!exist) {
@@ -28,15 +26,17 @@ class PaperController extends Controller {
           }
         }
       }
+
+      const emptyHistory = false
       
       if (!history) {
+        emptyHistory = true
         history = {
           openId: req.body.openId,
           questionSize: 0,
           rightQuestionSize: 0,
           correctRate: '0%'
         }
-        historyFacade.create(history).then(result => console.log('create history in commit paper controller:', result))
       }
       let correctPercentage = '', total = paper.questions.length + history.questionSize, right = 0, userScore = 0, questions = paperHistory.questionsHistory || [];
 
@@ -59,16 +59,19 @@ class PaperController extends Controller {
         openId: req.body.openId
       }
 
-      console.log('new history:', newHistory)
+      if (emptyHistory) {
+        historyFacade.create(newHistory)
+      } else {
+        historyFacade.update({ openId: req.body.openId }, newHistory)
+      }
 
-      Promise.all([historyFacade.update({ openId: req.body.openId }, newHistory), paperHistoryFacade.update({ _id: paperHistory._id }, {
+      paperHistoryFacade.update({ _id: paperHistory._id }, {
         status: 2,
         score: +userScore,
         questionsHistory: paperHistory.questionsHistory,
         progress: paper.questions.length,
         questionSize: paper.questions.length
-      })]).then(([result1, result2]) => {
-        console.log(result1, result2)
+      }).then(result2 => {
         res.json({
             code: 0,
             msg: 'ok',

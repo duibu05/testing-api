@@ -8,7 +8,6 @@ const _ = require('lodash');
 class CategoryController extends Controller {
   findQuestionDetails(req, res, next) {
     let point = 0, progress = 0, idx = 0, nextQuestionId = '';
-    console.log(req.body)
     Promise.all([
       questionFacade.findById(req.body.questionId), 
       paperFacade.findById(req.body.paperId),
@@ -51,14 +50,11 @@ class CategoryController extends Controller {
 
         paperHistory.questionSize = paper.questions.length
 
-        console.log('new paper history', paperHistory)
-
         paperHistoryFacade.update({ _id: paperHistory._id }, {
           questionsHistory: paperHistory.questionsHistory,
           questionSize: paperHistory.questionSize,
           progress: paperHistory.progress
         }).then(result => {
-          console.log('update paper history:', result);
           questionFacade.findById(nextQuestionId).then(nextQuestion => {
             res.json({
               code: 0,
@@ -86,7 +82,6 @@ class CategoryController extends Controller {
           status: 1,
           openId: req.body.openId,
         }).then(result => {
-          console.log('create paper history:', result);
           questionFacade.findById(nextQuestionId).then(nextQuestion => {
             res.json({
               code: 0,
