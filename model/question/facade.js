@@ -15,7 +15,7 @@ class QuestionFacade extends Facade {
       return this.model
         .findById(qid)
         .exec();
-    }).catch(err => next(err));
+    });
   }
 }
 
