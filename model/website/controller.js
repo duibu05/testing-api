@@ -19,7 +19,7 @@ class WebsiteIndexController extends Controller {
         const data = {
           recommended: _.groupBy(p1, 'cat'),
           newsList: p2Obj.filter(v => {
-            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
+            v.createdAt = moment(new Date(v.createdAt)).format('YYYY-MM-DD HH:mm');
             return true
           }),
           sidebar: p3
@@ -52,8 +52,8 @@ class WebsiteIndexController extends Controller {
           recommended: _.groupBy(p2, 'cat'),
           categoryList: p1,
           lesson: p3Obj.filter(v => {
-            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
-            v.startTime = moment(v.startTime).format('YYYY-MM-DD HH:mm');
+            v.createdAt = moment(new Date(v.createdAt)).format('YYYY-MM-DD HH:mm');
+            v.startTime = moment(new Date(v.startTime)).format('YYYY-MM-DD HH:mm');
             return true
           })
         }
@@ -73,8 +73,8 @@ class WebsiteIndexController extends Controller {
           recommended: _.groupBy(p2, 'cat'),
           categoryList: p1,
           lesson: p3Obj.filter(v => {
-            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
-            v.startTime = moment(v.startTime).format('YYYY-MM-DD HH:mm');
+            v.createdAt = moment(new Date(v.createdAt)).format('YYYY-MM-DD HH:mm');
+            v.startTime = moment(new Date(v.startTime)).format('YYYY-MM-DD HH:mm');
             return true
           })
         }
@@ -89,8 +89,8 @@ class WebsiteIndexController extends Controller {
   lessonDetails(req, res, next) {
     lessonFacade.findById(req.params.id).then(result => {
       const doc = JSON.parse(JSON.stringify(result))
-      doc.createdAt = moment(doc.createdAt).format('YYYY-MM-DD HH:mm');
-      doc.startTime = moment(doc.startTime).format('YYYY-MM-DD HH:mm');
+      doc.createdAt = moment(new Date(doc.createdAt)).format('YYYY-MM-DD HH:mm');
+      doc.startTime = moment(new Date(doc.startTime)).format('YYYY-MM-DD HH:mm');
       if (doc.releatedLesson.length) {
         lessonFacade.find({ _id: { $in: doc.releatedLesson } }).then(lessons => {
           doc.releatedLesson = lessons
@@ -120,7 +120,7 @@ class WebsiteIndexController extends Controller {
             msg: 'ok',
             data: {
               list: docs.filter(v => {
-                v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
+                v.createdAt = moment(new Date(v.createdAt)).format('YYYY-MM-DD HH:mm');
                 return true
               }),
               totalCount: result
@@ -153,7 +153,7 @@ class WebsiteIndexController extends Controller {
           doc.attachments = arr
         }
 
-        doc.createdAt = moment(doc.createdAt).format('YYYY-MM-DD HH:mm');
+        doc.createdAt = moment(new Date(doc.createdAt)).format('YYYY-MM-DD HH:mm');
         res.json({
           code: 0,
           msg: 'ok',
@@ -172,7 +172,7 @@ class WebsiteIndexController extends Controller {
             msg: 'ok',
             data: {
               list: docs.filter(v => {
-                v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
+                v.createdAt = moment(new Date(v.createdAt)).format('YYYY-MM-DD HH:mm');
                 return true
               }),
               totalCount: result
@@ -203,7 +203,7 @@ class WebsiteIndexController extends Controller {
 
         doc.attachments = arr
       }
-      doc.createdAt = moment(doc.createdAt).format('YYYY-MM-DD HH:mm');
+      doc.createdAt = moment(new Date(doc.createdAt)).format('YYYY-MM-DD HH:mm');
       res.json({
         code: 0,
         msg: 'ok',
