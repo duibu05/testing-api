@@ -12,15 +12,15 @@ class CategoryController extends Controller {
       questionFacade.findById(req.body.questionId), 
       paperFacade.findById(req.body.paperId),
       paperHistoryFacade.findOne({ openId: req.body.openId, paperId: req.body.paperId, status: 1 }),
-      questionFacade.findPrevQuestion(req.body.questionId)
-    ]).then(([question, paper, paperHistory, prevQuestion]) => {
+      questionFacade.findNextQuestion(req.body.questionId)
+    ]).then(([question, paper, paperHistory, nextQuestion]) => {
       const points = (() => {
         let points = 0, progress = 0, idx = 0
         for (let j = 0, len = paper.questions.length; j < len; j++) {
           if (paper.questions[j].id === req.body.questionId) {
-            points = paper.questions[j-1].points 
-            progress = j
-            idx = j - 1
+            points = paper.questions[j].points 
+            progress = j + 1
+            idx = j
             break;
           }
         }
@@ -43,10 +43,10 @@ class CategoryController extends Controller {
 
         if (notExist) {
           paperHistory.progress += 1
-          const prevQObj = JSON.parse(JSON.stringify(prevQuestion))
-          prevQObj.points = points
-          prevQObj.userAnswer = userSelectedAnswer
-          paperHistory.questionsHistory.push(prevQObj)
+          const questionObj = JSON.parse(JSON.stringify(question))
+          questionObj.points = points
+          questionObj.userAnswer = userSelectedAnswer
+          paperHistory.questionsHistory.push(questionObj)
         }
 
         paperHistory.questionSize = paper.questions.length
@@ -62,7 +62,7 @@ class CategoryController extends Controller {
           res.json({
             code: 0,
             msg: 'ok!',
-            data: question
+            data: nextQuestion
           })
         })
       } else {
@@ -88,7 +88,7 @@ class CategoryController extends Controller {
           res.json({
             code: 0,
             msg: 'ok!',
-            data: question
+            data: nextQuestion
           })
         })
       }
