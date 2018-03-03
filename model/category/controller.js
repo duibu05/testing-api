@@ -38,6 +38,9 @@ class CategoryController extends Controller {
             break;
           }
         }
+
+        console.log('new paper history', paperHistory)
+
         paperHistoryFacade.update({ _id: paperHistory._id }, {
           questionsHistory: paperHistory.questionsHistory,
           questionSize: paperHistory.questionSize,
