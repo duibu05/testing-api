@@ -34,7 +34,7 @@ class PaperController extends Controller {
           rightQuestionSize: 0,
           correctRate: '0%'
         }
-        historyFacade.create(history)
+        historyFacade.create(history).then(result => console.log('create history in commit paper controller:', result))
       }
       let correctPercentage = '', total = paper.questions.length + history.questionSize, right = history.rightQuestionSize, userScore = 0, questions = paperHistory.questionsHistory || [];
 

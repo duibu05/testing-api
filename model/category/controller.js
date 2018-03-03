@@ -43,7 +43,7 @@ class CategoryController extends Controller {
           questionSize: paperHistory.questionSize,
           progress: paperHistory.progress
         }).then(result => {
-          console.log(result);
+          console.log('update paper history:', result);
           res.json({
             code: 0,
             msg: 'ok!',
@@ -69,7 +69,7 @@ class CategoryController extends Controller {
           status: 1,
           openId: req.body.openId,
         }).then(result => {
-          console.log(result);
+          console.log('update paper history:', result);
           res.json({
             code: 0,
             msg: 'ok!',
