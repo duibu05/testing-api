@@ -29,7 +29,7 @@ class CategoryController extends Controller {
 
       if (paperHistory) {
         for (let i = 0, len = paperHistory.questionsHistory.length; i < len; i++) {
-          if (paperHistory.questionsHistory[i].id === req.body.questionId) {
+          if (paperHistory.questionsHistory[i]._id === req.body.questionId) {
             paperHistory.questionsHistory[i].userAnswer = userSelectedAnswer
             paperHistory.questionsHistory[i].points = points
             paperHistory.questionSize = paper.questions.length
