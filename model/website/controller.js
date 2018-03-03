@@ -52,7 +52,8 @@ class WebsiteIndexController extends Controller {
           recommended: _.groupBy(p2, 'cat'),
           categoryList: p1,
           lesson: p3Obj.filter(v => {
-            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD');
+            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
+            v.startTime = moment(v.startTime).format('YYYY-MM-DD HH:mm');
             return true
           })
         }
@@ -72,7 +73,8 @@ class WebsiteIndexController extends Controller {
           recommended: _.groupBy(p2, 'cat'),
           categoryList: p1,
           lesson: p3Obj.filter(v => {
-            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD');
+            v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
+            v.startTime = moment(v.startTime).format('YYYY-MM-DD HH:mm');
             return true
           })
         }
@@ -85,9 +87,12 @@ class WebsiteIndexController extends Controller {
   }
 
   lessonDetails(req, res, next) {
+    console.log(req.params)
     lessonFacade.findById(req.params.id).then(result => {
+      console.log(result)
       doc = JSON.parse(JSON.stringify(result))
       doc.createdAt = moment(doc.createdAt).format('YYYY-MM-DD HH:mm');
+      doc.startTime = moment(doc.startTime).format('YYYY-MM-DD HH:mm');
       if (doc.releatedLesson.length) {
         lessonFacade.find({ _id: { $in: doc.releatedLesson } }).then(lessons => {
           doc.releatedLesson = lessons
