@@ -27,7 +27,7 @@ class PaperController extends Controller {
         }
       }
 
-      const emptyHistory = false
+      let emptyHistory = false
       
       if (!history) {
         emptyHistory = true
