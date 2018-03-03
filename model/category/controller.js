@@ -12,13 +12,13 @@ class CategoryController extends Controller {
       questionFacade.findById(req.body.questionId), 
       paperFacade.findById(req.body.paperId),
       paperHistoryFacade.findOne({ openId: req.body.openId, paperId: req.body.paperId, status: 1 }),
-      questionFacade.findNextQuestion(req.body.questionId, req.body.paperId)
-    ]).then(([question, paper, paperHistory, nextQuestion]) => {
+    ]).then(([question, paper, paperHistory]) => {
       const points = (() => {
-        let points = 0, progress = 0, idx = 0
+        let points = 0, progress = 0, idx = 0, nextQuestionId = ''
         for (let j = 0, len = paper.questions.length; j < len; j++) {
           if (paper.questions[j].id === req.body.questionId) {
-            points = paper.questions[j].points 
+            points = paper.questions[j].points
+            nextQuestionId = paper.questions[j + 1].id
             progress = j + 1
             idx = j
             break;
@@ -59,10 +59,12 @@ class CategoryController extends Controller {
           progress: paperHistory.progress
         }).then(result => {
           console.log('update paper history:', result);
-          res.json({
-            code: 0,
-            msg: 'ok!',
-            data: nextQuestion
+          questionFacade.findById(nextQuestionId).then(nextQuestion => {
+            res.json({
+              code: 0,
+              msg: 'ok!',
+              data: nextQuestion
+            })
           })
         })
       } else {
@@ -85,10 +87,12 @@ class CategoryController extends Controller {
           openId: req.body.openId,
         }).then(result => {
           console.log('create paper history:', result);
-          res.json({
-            code: 0,
-            msg: 'ok!',
-            data: nextQuestion
+          questionFacade.findById(nextQuestionId).then(nextQuestion => {
+            res.json({
+              code: 0,
+              msg: 'ok!',
+              data: nextQuestion
+            })
           })
         })
       }
