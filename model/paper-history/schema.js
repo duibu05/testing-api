@@ -12,6 +12,14 @@ const paperHistorySchema = new Schema({
   questionsHistory: { type: Array, required: true },
   status: { type: Number, required: true, default: 1 }, // 1-undone 2-done
   openId: { type: String, required: true },
+  createdAt: { type: Date, default: new Date },
+  timestamp: { type: Number, default: Date.now() }
 });
+
+paperHistorySchema.pre('save', function(next) {
+  this.createdAt = new Date();
+  this.timestamp = Date.now();
+  next();
+})
 
 module.exports =  paperHistorySchema;
