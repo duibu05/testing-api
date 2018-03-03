@@ -38,7 +38,7 @@ class PaperController extends Controller {
         }
         historyFacade.create(history).then(result => console.log('create history in commit paper controller:', result))
       }
-      let correctPercentage = '', total = paper.questions.length + history.questionSize, right = history.rightQuestionSize, userScore = 0, questions = paperHistory.questionsHistory || [];
+      let correctPercentage = '', total = paper.questions.length + history.questionSize, right = 0, userScore = 0, questions = paperHistory.questionsHistory || [];
 
       for (let i = 0, len = questions.length; i < len; i++) {
         if (req.body.currentQuestionId === questions[i].id) {
@@ -50,14 +50,18 @@ class PaperController extends Controller {
         }
       }
 
-      correctPercentage = Math.round(right / total * 100) + '%'
+      correctPercentage = Math.round(right / paper.questions.length * 100) + '%'
 
-      Promise.all([historyFacade.update({ openId: req.body.openId }, {
+      const newHistory = {
         questionSize: total,
-        rightQuestionSize: right,
-        correctRate: correctPercentage,
+        rightQuestionSize: right + history.rightQuestionSize,
+        correctRate: Math.round((right + history.rightQuestionSize) / total * 100) + '%',
         openId: req.body.openId
-      }), paperHistoryFacade.update({ _id: paperHistory._id }, {
+      }
+
+      console.log('new history:', newHistory)
+
+      Promise.all([historyFacade.update({ openId: req.body.openId }, newHistory), paperHistoryFacade.update({ _id: paperHistory._id }, {
         status: 2,
         score: +userScore,
         questionsHistory: paperHistory.questionsHistory,
@@ -71,7 +75,7 @@ class PaperController extends Controller {
             data: {
               statistics:{
                 correctRate: correctPercentage,
-                questionSize: total
+                questionSize: paper.questions.length
               },
               paperHistory: {
                 score: userScore,
