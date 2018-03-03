@@ -7,7 +7,7 @@ const _ = require('lodash');
 
 class CategoryController extends Controller {
   findQuestionDetails(req, res, next) {
-    let points = 0, progress = 0, idx = 0, nextQuestionId = '';
+    let point = 0, progress = 0, idx = 0, nextQuestionId = '';
     console.log(req.body)
     Promise.all([
       questionFacade.findById(req.body.questionId), 
@@ -17,7 +17,7 @@ class CategoryController extends Controller {
       const points = (() => {
         for (let j = 0, len = paper.questions.length; j < len; j++) {
           if (paper.questions[j].id === req.body.questionId) {
-            points = paper.questions[j].points
+            point = paper.questions[j].points
             nextQuestionId = paper.questions[j + 1].id
             progress = j + 1
             idx = j
@@ -25,7 +25,7 @@ class CategoryController extends Controller {
           }
         }
 
-        return points
+        return point
       })()
       const userSelectedAnswer = req.body.userAnswer.split(',')
 
