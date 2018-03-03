@@ -61,6 +61,7 @@ class PaperController extends Controller {
         progress: paper.questions.length,
         questionSize: paper.questions.length
       })]).then(([result1, result2]) => {
+        console.log(result1, result2)
         res.json({
             code: 0,
             msg: 'ok',
