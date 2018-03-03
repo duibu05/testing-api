@@ -87,10 +87,8 @@ class WebsiteIndexController extends Controller {
   }
 
   lessonDetails(req, res, next) {
-    console.log(req.params)
     lessonFacade.findById(req.params.id).then(result => {
-      console.log(result)
-      doc = JSON.parse(JSON.stringify(result))
+      const doc = JSON.parse(JSON.stringify(result))
       doc.createdAt = moment(doc.createdAt).format('YYYY-MM-DD HH:mm');
       doc.startTime = moment(doc.startTime).format('YYYY-MM-DD HH:mm');
       if (doc.releatedLesson.length) {
