@@ -7,6 +7,7 @@ const _ = require('lodash');
 
 class CategoryController extends Controller {
   findQuestionDetails(req, res, next) {
+    console.log(req.body)
     Promise.all([
       questionFacade.findById(req.body.questionId), 
       paperFacade.findById(req.body.paperId),
