@@ -62,7 +62,7 @@ class CategoryController extends Controller {
           res.json({
             code: 0,
             msg: 'ok!',
-            data: question
+            data: nextQuestion
           })
         })
       } else {
@@ -88,7 +88,7 @@ class CategoryController extends Controller {
           res.json({
             code: 0,
             msg: 'ok!',
-            data: question
+            data: nextQuestion
           })
         })
       }

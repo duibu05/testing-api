@@ -25,6 +25,9 @@ class WechatController extends Controller {
                 questionSize: 0,
                 correctRate: "0%"
               };
+
+              data.userinfo.questionSize = data.history.questionSize
+              data.userinfo.correctRate = data.history.correctRate
               
               res.status(200).json({
                 code: 0,
@@ -33,7 +36,12 @@ class WechatController extends Controller {
               })
             }).catch(err => next(err));
         } else {
-          data.userinfo = {};
+          data.userinfo = {
+            score: {
+              questionSize: 0,
+              correctRate: "0%"
+            }
+          };
           data.history = {
             questionSize: 0,
             correctRate: "0%"
