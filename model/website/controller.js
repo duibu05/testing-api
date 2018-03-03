@@ -15,9 +15,10 @@ class WebsiteIndexController extends Controller {
   index(req, res, next) {
     Promise.all([carouselMgmtFacade.find({ page: 'webIndex' }), newsFacade.find({ page: 1, limit: 6, sort: '-timestamp' }), sidebarFacade.find({ page: 1, limit: 1 })])
       .then(([p1, p2, p3]) => {
+        const p2Obj = JSON.parse(JSON.stringify(p2))
         const data = {
           recommended: _.groupBy(p1, 'cat'),
-          newsList: p2.filter(v => {
+          newsList: p2Obj.filter(v => {
             v.createdAt = moment(v.createdAt).format('YYYY-MM-DD HH:mm');
             return true
           }),
@@ -46,10 +47,11 @@ class WebsiteIndexController extends Controller {
   teacherQE(req, res, next) {
     Promise.all([categoryFacade.find({ type: 'web-content', level: 'second' }), carouselMgmtFacade.find({ page: 'teacherQE' }), lessonFacade.find({ cat: '教师资格', page: 1, limit: 3 })])
       .then(([p1, p2, p3]) => {
+        const p3Obj = JSON.parse(JSON.stringify(p3))
         const data = {
           recommended: _.groupBy(p2, 'cat'),
           categoryList: p1,
-          lesson: p3.filter(v => {
+          lesson: p3Obj.filter(v => {
             v.createdAt = moment(v.createdAt).format('YYYY-MM-DD');
             return true
           })
@@ -65,10 +67,11 @@ class WebsiteIndexController extends Controller {
   juducialExam(req, res, next) {
     Promise.all([categoryFacade.find({ type: 'web-content', level: 'second' }), carouselMgmtFacade.find({ page: 'juducialExam' }), lessonFacade.find({ cat: '司法考试', page: 1, limit: 3 })])
       .then(([p1, p2, p3]) => {
+        const p3Obj = JSON.parse(JSON.stringify(p3))
         const data = {
           recommended: _.groupBy(p2, 'cat'),
           categoryList: p1,
-          lesson: p3.filter(v => {
+          lesson: p3Obj.filter(v => {
             v.createdAt = moment(v.createdAt).format('YYYY-MM-DD');
             return true
           })
@@ -82,7 +85,8 @@ class WebsiteIndexController extends Controller {
   }
 
   lessonDetails(req, res, next) {
-    lessonFacade.findById(req.params.id).then(doc => {
+    lessonFacade.findById(req.params.id).then(result => {
+      doc = JSON.parse(JSON.stringify(result))
       doc.createdAt = moment(doc.createdAt).format('YYYY-MM-DD HH:mm');
       if (doc.releatedLesson.length) {
         lessonFacade.find({ _id: { $in: doc.releatedLesson } }).then(lessons => {
@@ -106,7 +110,8 @@ class WebsiteIndexController extends Controller {
   news(req, res, next) {
     newsFacade.count({}).then(result => {
       if (result) {
-        newsFacade.find(req.query).then(docs => {
+        newsFacade.find(req.query).then(news => {
+          const docs = JSON.parse(JSON.stringify(news))
           res.json({
             code: 0,
             msg: 'ok',
@@ -131,7 +136,8 @@ class WebsiteIndexController extends Controller {
 
   newsDetails(req, res, next) {
     newsFacade.findById(req.params.id)
-      .then(doc => {
+      .then(news => {
+        const doc = JSON.parse(JSON.stringify(news))
         if (doc.attachments) {
           const arr = []
           Object.keys(doc.attachments).forEach(v => {
@@ -156,7 +162,8 @@ class WebsiteIndexController extends Controller {
   webContent(req, res, next) {
     webContentFacade.count({ cat: req.query.cat, subCat: req.query.subCat }).then(result => {
       if (result) {
-        webContentFacade.find(req.query).then(docs => {
+        webContentFacade.find(req.query).then(contents => {
+          const docs = JSON.parse(JSON.stringify(contents));
           res.json({
             code: 0,
             msg: 'ok',
@@ -180,7 +187,8 @@ class WebsiteIndexController extends Controller {
   }
 
   webContentDetails(req, res, next) {
-    webContentFacade.findById(req.params.id).then(doc => {
+    webContentFacade.findById(req.params.id).then(content => {
+      const doc = JSON.parse(JSON.stringify(content))
       if (doc.attachments) {
         const arr = []
         Object.keys(doc.attachments).forEach(v => {
