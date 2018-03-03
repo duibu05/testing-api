@@ -42,7 +42,14 @@ class CategoryController extends Controller {
           questionsHistory: paperHistory.questionsHistory,
           questionSize: paperHistory.questionSize,
           progress: paperHistory.progress
-        }).then(result => console.log(result))
+        }).then(result => {
+          console.log(result);
+          res.json({
+            code: 0,
+            msg: 'ok!',
+            data: question
+          })
+        })
       } else {
         const questionHistory = {
           userAnswer: userSelectedAnswer,
@@ -61,13 +68,15 @@ class CategoryController extends Controller {
           questionsHistory: [questionHistory],
           status: 1,
           openId: req.body.openId,
-        }).then(result => console.log(result))
+        }).then(result => {
+          console.log(result);
+          res.json({
+            code: 0,
+            msg: 'ok!',
+            data: question
+          })
+        })
       }
-      res.json({
-        code: 0,
-        msg: 'ok!',
-        data: question
-      })
     });
   }
 
