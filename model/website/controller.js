@@ -32,7 +32,7 @@ class WebsiteIndexController extends Controller {
               data.recommended.carousels.forEach(v => {
                 if (v.type === 'web-content') {
                   const content = contents.filter(d => d._id = v.target_id)
-                  v.contentCat = content[0].cat || ''
+                  v.cat = content[0].cat || ''
                 }
               })
 
@@ -85,7 +85,7 @@ class WebsiteIndexController extends Controller {
               data.recommended.carousels.forEach(v => {
                 if (v.type === 'web-content') {
                   const content = contents.filter(d => d._id = v.target_id)
-                  v.contentCat = content[0].cat || ''
+                  v.cat = content[0].cat || ''
                 }
               })
 
@@ -126,7 +126,7 @@ class WebsiteIndexController extends Controller {
               data.recommended.carousels.forEach(v => {
                 if (v.type === 'web-content') {
                   const content = contents.filter(d => d._id = v.target_id)
-                  v.contentCat = content[0].cat || ''
+                  v.cat = content[0].cat || ''
                 }
               })
 
