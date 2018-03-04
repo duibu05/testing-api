@@ -24,11 +24,34 @@ class WebsiteIndexController extends Controller {
           }),
           sidebar: p3
         }
-        res.status(200).json({
-          code: 0,
-          msg: 'ok',
-          data: data
-        })
+
+        if (data.recommended.carousels && data.recommended.carousels.length) {
+          const hasWebContent = data.recommended.carousels.filter(v => v.type === 'web-content').map(v => v.target_id)
+          if (hasWebContent && hasWebContent.length) {
+            webContentFacade.find({_id : {$in: hasWebContent}}).then(contents => {
+              data.recommended.carousels.forEach(v => {
+                if (v.type === 'web-content') {
+                  const content = contents.filter(d => d._id = v.target_id)
+                  v.contentCat = d.cat
+                }
+              })
+
+              res.status(200).json({
+                code: 0,
+                msg: 'ok',
+                data: data
+              })
+            })
+          } else {
+            res.status(200).json({
+              code: 0,
+              msg: 'ok',
+              data: data
+            })
+          }
+        }
+
+        
       }).catch(err => {
         next(err);
       })
