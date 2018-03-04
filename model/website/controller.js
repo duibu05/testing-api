@@ -17,7 +17,7 @@ class WebsiteIndexController extends Controller {
       .then(([p1, p2, p3]) => {
         const p2Obj = JSON.parse(JSON.stringify(p2))
         const data = {
-          recommended: _.groupBy(p1, 'cat'),
+          recommended: JSON.parse(JSON.stringify(_.groupBy(p1, 'cat'))),
           newsList: p2Obj.filter(v => {
             v.createdAt = moment(new Date(v.createdAt)).format('YYYY-MM-DD HH:mm');
             return true
@@ -70,7 +70,7 @@ class WebsiteIndexController extends Controller {
       .then(([p1, p2, p3]) => {
         const p3Obj = JSON.parse(JSON.stringify(p3))
         const data = {
-          recommended: _.groupBy(p2, 'cat'),
+          recommended: JSON.parse(JSON.stringify(_.groupBy(p2, 'cat'))),
           categoryList: p1,
           lesson: p3Obj.filter(v => {
             v.createdAt = moment(new Date(v.createdAt)).format('YYYY-MM-DD HH:mm');
@@ -111,7 +111,7 @@ class WebsiteIndexController extends Controller {
       .then(([p1, p2, p3]) => {
         const p3Obj = JSON.parse(JSON.stringify(p3))
         const data = {
-          recommended: _.groupBy(p2, 'cat'),
+          recommended: JSON.parse(JSON.stringify(_.groupBy(p2, 'cat'))),
           categoryList: p1,
           lesson: p3Obj.filter(v => {
             v.createdAt = moment(new Date(v.createdAt)).format('YYYY-MM-DD HH:mm');
