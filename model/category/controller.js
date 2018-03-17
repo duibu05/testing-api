@@ -301,8 +301,10 @@ class CategoryController extends Controller {
             }
 
             req.query.level = 'third';
-            this.facade.find(req.query)
-              .then(thirdDocs => {
+            Promise.all([
+              this.facade.find(req.query),
+              this.facade.find({ level: 'fourth' })
+            ]).then(([thirdDocs, fourthDocs]) => {
                 return res.json({ code: 0, data: {
                   first: {
                     label: '一级分类',
@@ -315,6 +317,10 @@ class CategoryController extends Controller {
                   third: {
                     label: '三级分类',
                     list: thirdDocs
+                  },
+                  fourth: {
+                    label: '四级分类',
+                    list: fourthDocs
                   }
                 }})
               }).catch(err => next(err))
