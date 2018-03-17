@@ -13,7 +13,7 @@ const categorySchema = new Schema({
   first: { type: catSchema, required: false },
   second: { type: catSchema, required: false },
   third: { type: catSchema, required: false },
-  forth: { type: catSchema, required: false },
+  fourth: { type: catSchema, required: false },
   image: { type: String, required: true }
 });
 

@@ -184,7 +184,7 @@ class CategoryController extends Controller {
   }
   
   findSubject(req, res, next){
-    categoryFacade.find({ type: 'shijuan', level: 'second' }).then(subjects => {
+    categoryFacade.find({ type: 'shijuan', level: 'second', 'first.id': req.body.targetId }, 'name image').then(subjects => {
       res.json({
         code: 0,
         msg: 'ok!',
