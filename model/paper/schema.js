@@ -15,6 +15,10 @@ const paperSchema = new Schema({
     id: { type: String, required: true },
     name: { type: String, required: true }
   },
+  fourthCat: {
+    id: { type: String, required: true },
+    name: { type: String, required: true }
+  },
   image: { type: String, required: true },
   questions: { type: Array },
   createdAt: { type: Date, default: new Date },

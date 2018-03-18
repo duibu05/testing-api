@@ -3,6 +3,7 @@ const categoryFacade = require('./facade');
 const paperFacade = require('../paper/facade');
 const questionFacade = require('../question/facade');
 const paperHistoryFacade = require('../paper-history/facade');
+const wrongQuestionFacade = require('../wrong-question/facade');
 const _ = require('lodash');
 
 class CategoryController extends Controller {
@@ -94,6 +95,105 @@ class CategoryController extends Controller {
     });
   }
 
+  commitWrongPaper(req, res, next) {
+    const userAnswer = req.body.currentUserAnswer.split(',')
+    wrongQuestionFacade.find({ _id: req.body.wrongPaperId }).then(paper => {
+      if (!paper) return res.json({ code: -1, msg: 'empty paper', data: {} })
+      let userScore = 0, questionSize = 0, right = 0;
+      const wrongQuestions = paper.questionsHistory.filter(v => {
+        if (req.body.currentQuestionId === questions[i].id) {
+          questions[i].userAnswer = userAnswer
+        }
+        questionSize += 1
+        if (v.userAnswer.sort().join(',') === v.rightAnswer.sort().join(',')) {
+          userScore += +(questions[i].points || 0)
+          right += 1
+          return false
+        }
+        return true
+      })
+
+      if (wrongQuestions && wrongQuestions.length) {
+        wrongQuestionFacade.update({ _id: req.body.wrongPaperId }, {
+          paperId: req.body.wrongPaperId,
+          title: paper.title,
+          image: paper.image,
+          score: 0,
+          progress: 0,
+          questionSize: wrongQuestions.length,
+          questionsHistory: wrongQuestions,
+          status: 1, // 1-undone 2-done
+          openId: paper.openId
+        }).then(result => {
+          res.json({
+            code: 0,
+            msg: 'ok',
+            data: {
+              statistics: {
+                correctRate: Math.round(right / questionSize * 100) + '%',
+                questionSize: questionSize
+              },
+              score: userScore,
+            }
+          })
+        })
+      } else {
+        wrongQuestionFacade.remove({ _id: req.body.wrongPaperId }).then(result => {
+          res.json({
+            code: 0,
+            msg: 'ok',
+            data: {
+              statistics: {
+                correctRate: Math.round(right / paper.questions.length * 100) + '%',
+                questionSize: paper.questions.length
+              },
+              score: userScore,
+            }
+          })
+        })
+      }
+    })
+    
+  }
+
+  submitWrongQuestionUserAnswer(req, res, next) {
+    const userAnswer = req.body.currentUserAnswer.split(',')
+    wrongQuestionFacade.findById(req.body.wrongPaperId).then(doc => {
+      let index = 0;
+      for (let i = 0, len = doc.questionsHistory.length; i < len; i++) {
+        if (doc.questionsHistory[i].id === req.body.currentQuestionId) {
+          doc.questionsHistory[i].userAnswer = userAnswer
+          index = i + 1
+          break;
+        }
+      }
+      if (doc.progress < index) {
+        doc.progress = index
+      }
+
+      wrongQuestionFacade.update({ _id: req.body.wrongPaperId }, {
+        progress: doc.progress,
+        questionsHistory: doc.questionsHistory,
+      }).then(result => {
+        return res.json({
+          code: 0,
+          msg: 'ok',
+          data: result
+        })
+      })
+    })
+  }
+
+  findWrongPaperDetails(req, res, next) {
+    wrongQuestionFacade.findById(req.body.wrongPaperId).then(doc => {
+      res.json({
+        code: 0,
+        msg: 'ok',
+        data: doc
+      })
+    })
+  }
+
   findPaperDetails(req, res, next) {
     paperFacade.findOne({_id: req.body.paperId}).then(paper => {
       if (!paper.questions.length) {
@@ -140,8 +240,18 @@ class CategoryController extends Controller {
     })
   }
 
+  findWrongPaper(req, res, next) {
+    wrongQuestionFacade.find({ openId: req.body.openId, status: 1 }, 'title image questionSize progress').then(papers => {
+      res.json({
+        code: 0,
+        msg: 'ok',
+        data: papers
+      })
+    })
+  }
+
   findPaper(req, res, next) {
-    paperFacade.find({ 'firstCat.id': req.body.targetId, 'secondCat.id': req.body.subjectId, 'thirdCat.id': req.body.categoryId }).then(paper => {
+    paperFacade.find({ 'firstCat.id': req.body.targetId, 'secondCat.id': req.body.subjectId, 'thirdCat.id': req.body.categoryId, 'fourthCat.id': req.body.subCategoryId }).then(paper => {
       const results = [];
       const pArr = [];
       const rArr = [];
@@ -184,7 +294,7 @@ class CategoryController extends Controller {
   }
   
   findSubject(req, res, next){
-    categoryFacade.find({ type: 'shijuan', level: 'second', 'first.id': req.body.targetId }, 'name image').then(subjects => {
+    categoryFacade.find({ type: 'shijuan', level: 'second', 'first._id': req.body.targetId }, 'name image').then(subjects => {
       res.json({
         code: 0,
         msg: 'ok!',
@@ -194,12 +304,22 @@ class CategoryController extends Controller {
   }
 
   findCategory(req, res, next) {
-    categoryFacade.find({ type: 'shijuan', level: 'third' }).then(cats => {
+    categoryFacade.find({ type: 'shijuan', level: 'third', 'first._id': req.body.targetId, 'second._id': req.body.subjectId }, 'name image').then(categories => {
+      res.json({
+        code: 0,
+        msg: 'ok!',
+        data: categories
+      })
+    })
+  }
+
+  findSubCategory(req, res, next) {
+    categoryFacade.find({ type: 'shijuan', level: 'fourth', 'first._id': req.body.targetId, 'second._id': req.body.subjectId, 'third._id': req.body.categoryId },  'name image').then(cats => {
       const results = [];
       const pArr = [];
       const rArr = [];
       for(let i = 0, len = cats.length; i < len; i++) {
-        pArr.push(paperFacade.find({ 'thirdCat.id': cats[i]._id, 'firstCat.id': req.body.targetId, 'secondCat.id': req.body.subjectId }).catch(e => 0))
+        pArr.push(paperFacade.find({ 'fourthCat.id': cats[i]._id, 'firstCat.id': req.body.targetId, 'secondCat.id': req.body.subjectId, 'thirdCat.id': req.body.categoryId }).catch(e => 0))
         rArr.push(`r${i}`)
       }
 
@@ -250,10 +370,28 @@ class CategoryController extends Controller {
             results.push(result)
           }
 
-          res.json({
-            code: 0,
-            msg: 'ok!',
-            data: results
+          wrongQuestionFacade.find({ openId: req.body.openId, status: 1 }).then(wrong => {
+            let wrongLen = 0
+            let wrongProgress = 0
+            for (let w = 0, wlen = wrong.length; w < wlen; w++) {
+              wrongLen += wrong[w].questionsHistory.length
+              wrongProgress += wrong[w].progress
+            }
+
+            results.push({
+              _id: 'wrong',
+              type: 'wrong',
+              name: '我的错题',
+              image: 'https://cdn.gdpassing.com/FtBnhBVsFYgH3Ubeeq6PIHeahrgI',
+              progress: `${wrongProgress}/${wrongLen}`,
+              percentage: wrongLen !== 0 ? Math.round(wrongProgress / wrongLen * 100) : 0
+            })
+
+            res.json({
+              code: 0,
+              msg: 'ok!',
+              data: results
+            })
           })
         })
       })

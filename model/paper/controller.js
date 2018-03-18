@@ -1,6 +1,7 @@
 const Controller = require('../../lib/controller');
 const paperFacade = require('./facade');
 const paperHistoryFacade = require('../paper-history/facade');
+const wrongQuestionFacade = require('../wrong-question/facade');
 const historyFacade = require('../history/facade');
 const questionFacade = require('../question/facade');
 
@@ -38,17 +39,48 @@ class PaperController extends Controller {
           correctRate: '0%'
         }
       }
-      let correctPercentage = '', total = paper.questions.length + history.questionSize, right = 0, userScore = 0, questions = paperHistory.questionsHistory || [];
+      let correctPercentage = '', total = paper.questions.length + history.questionSize, right = 0, userScore = 0, questions = paperHistory.questionsHistory || [], wrongQuestions = [];
+
 
       for (let i = 0, len = questions.length; i < len; i++) {
         if (req.body.currentQuestionId === questions[i].id) {
-            questions[i].userAnswer = userAnswer
+          questions[i].userAnswer = userAnswer
         }
         if (questions[i].userAnswer.sort().join(',') === questions[i].rightAnswer.sort().join(',')) {
-            userScore += +(questions[i].points || 0)
-            right += 1
+          userScore += +(questions[i].points || 0)
+          right += 1
+        } else {
+          wrongQuestions.push(questions[i])
         }
       }
+
+      wrongQuestionFacade.find({ paperId: req.body.paperId, openId: req.body.openId }).then(wrong => {
+        if (wrong) {
+          wrongQuestionFacade.update({ paperId: req.body.paperId, openId: req.body.openId, status: 1 }, {
+            paperId: req.body.paperId,
+            title: paper.title,
+            image: paper.image,
+            score: 0,
+            progress: 0,
+            questionSize: wrongQuestions.length,
+            questionsHistory: wrongQuestions,
+            status: 1, // 1-undone 2-done
+            openId: req.body.openId
+          })
+        } else {
+          wrongQuestionFacade.create({
+            paperId: req.body.paperId,
+            title: paper.title,
+            image: paper.image,
+            score: 0,
+            progress: 0,
+            questionSize: wrongQuestions.length,
+            questionsHistory: wrongQuestions,
+            status: 1, // 1-undone 2-done
+            openId: req.body.openId
+          })
+        }
+      })
 
       correctPercentage = Math.round(right / paper.questions.length * 100) + '%'
 
