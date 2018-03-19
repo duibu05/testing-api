@@ -241,7 +241,7 @@ class CategoryController extends Controller {
   }
 
   findWrongPaper(req, res, next) {
-    wrongQuestionFacade.find({ openId: req.body.openId, status: 1 }, 'title image questionSize progress').then(papers => {
+    wrongQuestionFacade.find({ paperId: { $in: (req.body.wrongPaperIdArr || '').split(',') }, openId: req.body.openId, status: 1 }, 'title image questionSize progress').then(papers => {
       res.json({
         code: 0,
         msg: 'ok',
@@ -314,6 +314,7 @@ class CategoryController extends Controller {
   }
 
   findSubCategory(req, res, next) {
+    const paperIdArray = [];
     categoryFacade.find({ type: 'shijuan', level: 'fourth', 'first._id': req.body.targetId, 'second._id': req.body.subjectId, 'third._id': req.body.categoryId },  'name image').then(cats => {
       const results = [];
       const pArr = [];
@@ -329,6 +330,7 @@ class CategoryController extends Controller {
         const catQuestionSizeArr = []
         for (let j = 0, jLen = rArr.length; j < jLen; j++) {
           const idArr = rArr[j].map(v => v._id)
+          paperIdArray.concat(idArr)
 
           let totalLen = 0
           if(rArr[j]) {
@@ -370,7 +372,7 @@ class CategoryController extends Controller {
             results.push(result)
           }
 
-          wrongQuestionFacade.find({ openId: req.body.openId, status: 1 }).then(wrong => {
+          wrongQuestionFacade.find({ paperId: { $in: paperIdArray }, openId: req.body.openId, status: 1 }).then(wrong => {
             let wrongLen = 0
             let wrongProgress = 0
             for (let w = 0, wlen = wrong.length; w < wlen; w++) {
@@ -381,6 +383,7 @@ class CategoryController extends Controller {
             results.push({
               _id: 'wrong',
               type: 'wrong',
+              wrongPaperIdArr: paperIdArray.join(','),
               name: '我的错题',
               image: 'https://cdn.gdpassing.com/FtBnhBVsFYgH3Ubeeq6PIHeahrgI',
               progress: `${wrongProgress}/${wrongLen}`,
