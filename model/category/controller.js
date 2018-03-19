@@ -101,12 +101,12 @@ class CategoryController extends Controller {
       if (!paper) return res.json({ code: -1, msg: 'empty paper', data: {} })
       let userScore = 0, questionSize = 0, right = 0;
       const wrongQuestions = paper.questionsHistory.filter(v => {
-        if (req.body.currentQuestionId === v[i].id) {
-          v[i].userAnswer = userAnswer
+        if (req.body.currentQuestionId === v.id) {
+          v.userAnswer = userAnswer
         }
         questionSize += 1
         if (v.userAnswer.sort().join(',') === v.rightAnswer.sort().join(',')) {
-          userScore += +(v[i].points || 0)
+          userScore += +(v.points || 0)
           right += 1
           return false
         }
