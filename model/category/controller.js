@@ -97,7 +97,7 @@ class CategoryController extends Controller {
 
   commitWrongPaper(req, res, next) {
     const userAnswer = req.body.currentUserAnswer.split(',')
-    wrongQuestionFacade.find({ _id: req.body.wrongPaperId }).then(paper => {
+    wrongQuestionFacade.findById(req.body.wrongPaperId).then(paper => {
       if (!paper) return res.json({ code: -1, msg: 'empty paper', data: {} })
       let userScore = 0, questionSize = 0, right = 0;
       const wrongQuestions = paper.questionsHistory.filter(v => {
