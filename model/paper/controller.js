@@ -54,33 +54,35 @@ class PaperController extends Controller {
         }
       }
 
-      wrongQuestionFacade.findOne({ paperId: req.body.paperId, openId: req.body.openId, status: 1 }).then(wrong => {
-        if (wrong) {
-          wrongQuestionFacade.update({ paperId: req.body.paperId, openId: req.body.openId, status: 1 }, {
-            paperId: req.body.paperId,
-            title: paper.title,
-            image: paper.image,
-            score: 0,
-            progress: 0,
-            questionSize: wrongQuestions.length,
-            questionsHistory: wrongQuestions,
-            status: 1, // 1-undone 2-done
-            openId: req.body.openId
-          }).catch(e => console.log('Method in Paper Controller invoked a update wrong question error', e.message))
-        } else {
-          wrongQuestionFacade.create({
-            paperId: req.body.paperId,
-            title: paper.title,
-            image: paper.image,
-            score: 0,
-            progress: 0,
-            questionSize: wrongQuestions.length,
-            questionsHistory: wrongQuestions,
-            status: 1, // 1-undone 2-done
-            openId: req.body.openId
-          }).catch(e => console.log('Method in Paper Controller invoked a create wrong question error', e.message))
-        }
-      })
+      if (wrongQuestions && wrongQuestions.length) {
+        wrongQuestionFacade.findOne({ paperId: req.body.paperId, openId: req.body.openId, status: 1 }).then(wrong => {
+          if (wrong) {
+            wrongQuestionFacade.update({ paperId: req.body.paperId, openId: req.body.openId, status: 1 }, {
+              paperId: req.body.paperId,
+              title: paper.title,
+              image: paper.image,
+              score: 0,
+              progress: 0,
+              questionSize: wrongQuestions.length,
+              questionsHistory: wrongQuestions,
+              status: 1, // 1-undone 2-done
+              openId: req.body.openId
+            }).catch(e => console.log('Method in Paper Controller invoked a update wrong question error', e.message))
+          } else {
+            wrongQuestionFacade.create({
+              paperId: req.body.paperId,
+              title: paper.title,
+              image: paper.image,
+              score: 0,
+              progress: 0,
+              questionSize: wrongQuestions.length,
+              questionsHistory: wrongQuestions,
+              status: 1, // 1-undone 2-done
+              openId: req.body.openId
+            }).catch(e => console.log('Method in Paper Controller invoked a create wrong question error', e.message))
+          }
+        })
+      }
 
       correctPercentage = Math.round(right / paper.questions.length * 100) + '%'
 
