@@ -329,9 +329,10 @@ class CategoryController extends Controller {
         const rrArr = [];
         const catQuestionSizeArr = []
         for (let j = 0, jLen = rArr.length; j < jLen; j++) {
-          const idArr = rArr[j].map(v => v._id)
-          paperIdArray.concat(idArr)
-
+          const idArr = rArr[j].map(v => {
+            paperIdArray.push(v._id)
+            return v._id
+          })
           let totalLen = 0
           if(rArr[j]) {
             for(let k = 0, klen = rArr[j].length; k < klen; k++) {
