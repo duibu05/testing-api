@@ -54,10 +54,7 @@ class PaperController extends Controller {
         }
       }
 
-      console.log('params', req.body.paperId, req.body.openId)
-
-      wrongQuestionFacade.find({ paperId: req.body.paperId, openId: req.body.openId, status: 1 }).then(wrong => {
-        console.log('wrong', wrong)
+      wrongQuestionFacade.findOne({ paperId: req.body.paperId, openId: req.body.openId, status: 1 }).then(wrong => {
         if (wrong) {
           wrongQuestionFacade.update({ paperId: req.body.paperId, openId: req.body.openId, status: 1 }, {
             paperId: req.body.paperId,
@@ -69,8 +66,6 @@ class PaperController extends Controller {
             questionsHistory: wrongQuestions,
             status: 1, // 1-undone 2-done
             openId: req.body.openId
-          }).then(result => {
-            console.log('update')
           })
         } else {
           wrongQuestionFacade.create({
@@ -83,8 +78,6 @@ class PaperController extends Controller {
             questionsHistory: wrongQuestions,
             status: 1, // 1-undone 2-done
             openId: req.body.openId
-          }).then(result => {
-            console.log('create')
           })
         }
       })
