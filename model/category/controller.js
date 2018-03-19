@@ -115,15 +115,11 @@ class CategoryController extends Controller {
 
       if (wrongQuestions && wrongQuestions.length) {
         wrongQuestionFacade.update({ _id: req.body.wrongPaperId }, {
-          paperId: req.body.wrongPaperId,
-          title: paper.title,
-          image: paper.image,
           score: 0,
           progress: 0,
           questionSize: wrongQuestions.length,
           questionsHistory: wrongQuestions,
           status: 1, // 1-undone 2-done
-          openId: paper.openId
         }).then(result => {
           res.json({
             code: 0,
