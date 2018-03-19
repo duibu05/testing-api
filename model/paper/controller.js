@@ -66,7 +66,7 @@ class PaperController extends Controller {
             questionsHistory: wrongQuestions,
             status: 1, // 1-undone 2-done
             openId: req.body.openId
-          })
+          }).catch(e => console.log('Method in Paper Controller invoked a update wrong question error', e.message))
         } else {
           wrongQuestionFacade.create({
             paperId: req.body.paperId,
@@ -78,7 +78,7 @@ class PaperController extends Controller {
             questionsHistory: wrongQuestions,
             status: 1, // 1-undone 2-done
             openId: req.body.openId
-          })
+          }).catch(e => console.log('Method in Paper Controller invoked a create wrong question error', e.message))
         }
       })
 
