@@ -101,7 +101,7 @@ class CategoryController extends Controller {
       if (!paper) return res.json({ code: -1, msg: 'empty paper', data: {} })
       let userScore = 0, questionSize = 0, right = 0;
       const wrongQuestions = paper.questionsHistory.filter(v => {
-        if (req.body.currentQuestionId === v.id) {
+        if (req.body.currentQuestionId === v._id) {
           v.userAnswer = userAnswer
         }
         questionSize += 1
@@ -157,7 +157,7 @@ class CategoryController extends Controller {
     wrongQuestionFacade.findById(req.body.wrongPaperId).then(doc => {
       let index = 0;
       for (let i = 0, len = doc.questionsHistory.length; i < len; i++) {
-        if (doc.questionsHistory[i].id === req.body.currentQuestionId) {
+        if (doc.questionsHistory[i]._id === req.body.currentQuestionId) {
           doc.questionsHistory[i].userAnswer = userAnswer
           index = i + 1
           break;
