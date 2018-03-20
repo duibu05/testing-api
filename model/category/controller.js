@@ -113,6 +113,8 @@ class CategoryController extends Controller {
         return true
       })
 
+      paper.score = userScore
+
       if (wrongQuestions && wrongQuestions.length) {
         wrongQuestionFacade.update({ _id: req.body.wrongPaperId }, {
           score: 0,
@@ -129,7 +131,7 @@ class CategoryController extends Controller {
                 correctRate: Math.round(right / questionSize * 100) + '%',
                 questionSize: questionSize
               },
-              score: userScore,
+              paperHistory: paper
             }
           })
         })
@@ -143,7 +145,7 @@ class CategoryController extends Controller {
                 correctRate: Math.round(right / paper.questionsHistory.length * 100) + '%',
                 questionSize: paper.questionsHistory.length
               },
-              score: userScore,
+              paperHistory: paper
             }
           })
         })
