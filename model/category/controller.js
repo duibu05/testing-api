@@ -140,8 +140,8 @@ class CategoryController extends Controller {
             msg: 'ok',
             data: {
               statistics: {
-                correctRate: Math.round(right / paper.questions.length * 100) + '%',
-                questionSize: paper.questions.length
+                correctRate: Math.round(right / paper.questionsHistory.length * 100) + '%',
+                questionSize: paper.questionsHistory.length
               },
               score: userScore,
             }
